@@ -1,0 +1,1 @@
+A Laravel web app for listing all services in a local area.

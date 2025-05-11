@@ -10,7 +10,7 @@ use App\Livewire\Home;
 //     return view('welcome');
 // })->name('home');
 
-Route::get('/new', Home::class)->name('home');
+Route::get('/', Home::class)->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

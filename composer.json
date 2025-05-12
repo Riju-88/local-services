@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.1.1",
         "livewire/volt": "^1.7.0",
+        "owenvoke/blade-fontawesome": "^2.9",
         "spatie/laravel-permission": "^6.17"
     },
     "require-dev": {

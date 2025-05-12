@@ -18,6 +18,8 @@ class Provider extends Model
         'latitude',
         'longitude',
         'is_active',
+        'providable_id',
+        'providable_type',
         
     ];
 

@@ -11,7 +11,7 @@ use App\Livewire\Home;
 // })->name('home');
 
 Route::get('/', Home::class)->name('home');
-
+Route::redirect('root', '/admin')->name('admin');
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

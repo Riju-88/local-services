@@ -1,99 +1,55 @@
-<div class="py-6 px-4">
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-        {{-- @foreach($categories as $category) --}}
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-                    {{-- <img src="{{ asset('images/icons/' . $category['icon']) }}" alt="{{ $category['name'] }}" class="w-8 h-8"> --}}
-                    {{-- placeholder image link  --}}
-                    <img src="https://source.unsplash.com/random/?food" alt="default" class="w-8 h-8">
+<div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4">
+    @foreach ($services as $service)
+        @php
+            $hasCategories = $service->serviceCategory->isNotEmpty();
+            $modalName = "service-{$service->id}";
+        @endphp
 
+        <div class="text-center">
+            @if ($hasCategories)
+                <flux:modal.trigger name="{{ $modalName }}">
+                    <flux:button variant="primary" class="w-full h-full flex flex-col items-center justify-center p-4 bg-white rounded-xl shadow hover:bg-white transition space-y-2">
+                        <div class="w-12 h-12 flex items-center justify-center">
+                            @svg($service->icon, 'w-10 h-10 text-gray-800')
+                        </div>
+                        <span class="text-sm font-medium text-gray-800">{{ $service->name }}</span>
+                    </flux:button>
+                </flux:modal.trigger>
+            @else
+                <flux:button
+                    wire:click="redirectToProviders({{ $service->id }})"
+                    class="w-full h-full flex flex-col items-center justify-center p-4 bg-white rounded-xl shadow hover:bg-gray-100 transition space-y-2"
+                >
+                    <div class="w-12 h-12 flex items-center justify-center">
+                        @svg($service->icon, 'w-10 h-10 text-gray-800')
+                    </div>
+                    <span class="text-sm font-medium text-gray-800">{{ $service->name }}</span>
+                </flux:button>
+            @endif
 
-                </div>
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-                    {{-- <img src="{{ asset('images/icons/' . $category['icon']) }}" alt="{{ $category['name'] }}" class="w-8 h-8"> --}}
-                    {{-- placeholder image link  --}}
-                    <img src="https://source.unsplash.com/random/?food" alt="default" class="w-8 h-8">
+            <!-- Modal for categories -->
+            @if ($hasCategories)
+                <flux:modal name="service-{{ $service->id }}" class="md:w-[28rem]">
+                    <div class="space-y-6">
+                        <div>
+                            <flux:heading size="lg">Categories for {{ $service->name }}</flux:heading>
+                            <flux:text class="mt-1 text-sm text-gray-500">Choose one to view providers</flux:text>
+                        </div>
 
-
-                </div>
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-                    {{-- <img src="{{ asset('images/icons/' . $category['icon']) }}" alt="{{ $category['name'] }}" class="w-8 h-8"> --}}
-                    {{-- placeholder image link  --}}
-                    <img src="https://source.unsplash.com/random/?food" alt="default" class="w-8 h-8">
-
-
-                </div>
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-                    {{-- <img src="{{ asset('images/icons/' . $category['icon']) }}" alt="{{ $category['name'] }}" class="w-8 h-8"> --}}
-                    {{-- placeholder image link  --}}
-                    <img src="https://source.unsplash.com/random/?food" alt="default" class="w-8 h-8">
-
-
-                </div>
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-                    {{-- <img src="{{ asset('images/icons/' . $category['icon']) }}" alt="{{ $category['name'] }}" class="w-8 h-8"> --}}
-                    {{-- placeholder image link  --}}
-                    <img src="https://source.unsplash.com/random/?food" alt="default" class="w-8 h-8">
-
-
-                </div>
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-                    {{-- <img src="{{ asset('images/icons/' . $category['icon']) }}" alt="{{ $category['name'] }}" class="w-8 h-8"> --}}
-                    {{-- placeholder image link  --}}
-                    <img src="https://source.unsplash.com/random/?food" alt="default" class="w-8 h-8">
-
-
-                </div>
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-                    {{-- <img src="{{ asset('images/icons/' . $category['icon']) }}" alt="{{ $category['name'] }}" class="w-8 h-8"> --}}
-                    {{-- placeholder image link  --}}
-                    <img src="https://source.unsplash.com/random/?food" alt="default" class="w-8 h-8">
-
-
-                </div>
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-             <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                 <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-     <x-fas-faucet class="text-black w-8 h-8" />
-</div>
-
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- repeatable block --}}
-            <div class="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow hover:shadow-md transition">
-                 <div class="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-3">
-     <x-fas-house-circle-check class="text-black w-8 h-8" />
-</div>
-
-                <span class="text-sm font-medium text-gray-700"> "$category['name']"</span>
-            </div>
-        {{-- @endforeach --}}
-    </div>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            @foreach ($service->serviceCategory as $category)
+                                <button
+                                    wire:click="redirectToProviders({{ $service->id }}, {{ $category->id }})"
+                                    class="flex flex-col items-center justify-center text-center p-4 bg-white rounded-xl shadow hover:bg-gray-100 transition space-y-2"
+                                >
+                                    @svg($category->icon, 'w-10 h-10 text-gray-800')
+                                    <div class="text-sm font-semibold">{{ $category->name }}</div>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </flux:modal>
+            @endif
+        </div>
+    @endforeach
 </div>

@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
-class AssignAdminRoleSeeder extends Seeder
+class AssignUserRolesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,10 +14,13 @@ class AssignAdminRoleSeeder extends Seeder
     public function run(): void
     {
         //
-          // Assign 'admin' to the user
-        $admin = User::find(43);
-        if ($admin) {
-            $admin->assignRole('admin');
+         $users = User::all();
+
+        foreach ($users as $user) {
+            if (!$user->hasRole('user')) {
+                $user->assignRole('user');
+            }
         }
+        
     }
 }

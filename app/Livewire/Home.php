@@ -16,7 +16,7 @@ class Home extends Component
          $this->services = Service::with('serviceCategory')->get();
     }
 
-    
+  
 
     public function render()
     {

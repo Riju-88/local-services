@@ -29,11 +29,11 @@ class RoleAndPermissionSeeder extends Seeder
 
         $adminRole->givePermissionTo('manage services', 'manage service categories', 'manage providers', 'manage reviews');
 
-        $providerRole->syncPermissions($userRole->permissions);
+       
         $userRole->givePermissionTo('view services', 'view service categories', 'manage reviews', 'manage providers');
+   $providerRole->syncPermissions($userRole->permissions);
 
-
-
+ 
 
     }
 }

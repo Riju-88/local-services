@@ -63,7 +63,8 @@ class ProviderResource extends Resource
                 Forms\Components\TextInput::make('longitude')
                     ->numeric(),
                 Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->required()
+                    ->default(true),
             ]);
     }
 

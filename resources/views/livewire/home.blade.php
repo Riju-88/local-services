@@ -17,7 +17,7 @@
                 </flux:modal.trigger>
             @else
                 <flux:button
-                    wire:click="redirectToProviders({{ $service->id }})"
+                    href="{{ route('providers', ['service_slug' => $service->slug]) }}"
                     class="w-full h-full flex flex-col items-center justify-center p-4 bg-white rounded-xl shadow hover:bg-gray-100 transition space-y-2"
                 >
                     <div class="w-12 h-12 flex items-center justify-center">
@@ -38,13 +38,12 @@
 
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                             @foreach ($service->serviceCategory as $category)
-                                <button
-                                    wire:click="redirectToProviders({{ $service->id }}, {{ $category->id }})"
-                                    class="flex flex-col items-center justify-center text-center p-4 bg-white rounded-xl shadow hover:bg-gray-100 transition space-y-2"
-                                >
-                                    @svg($category->icon, 'w-10 h-10 text-gray-800')
-                                    <div class="text-sm font-semibold">{{ $category->name }}</div>
-                                </button>
+                                <a href="{{ route('providers', ['service_slug' => $service->slug, 'category_slug' => $category->slug]) }}"
+   class="flex flex-col items-center justify-center text-center p-4 bg-white rounded-xl shadow hover:bg-gray-100 transition space-y-2">
+    @svg($category->icon, 'w-10 h-10 text-gray-800')
+    <div class="text-sm font-semibold">{{ $category->name }}</div>
+</a>
+
                             @endforeach
                         </div>
                     </div>

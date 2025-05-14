@@ -69,9 +69,9 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
-    public function provider()
+    public function providers()
     {
-        return $this->hasOne(Provider::class);
+        return $this->hasMany(Provider::class);
     }
 
 

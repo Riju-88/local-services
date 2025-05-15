@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-8">
     {{-- Page Header --}}
     <div class="mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800">{{ $pageTitle }}</h1>
+        <h1 class="text-2xl font-semibold text-gray-100">{{ $pageTitle }}</h1>
 
         {{-- Breadcrumbs --}}
         @if ($service)
@@ -73,7 +73,7 @@
 
                         @if ($provider->user)
                             <p class="text-sm text-gray-500 mb-1">
-                                By <span class="font-medium">{{ $provider->user->name }}</span>
+                                By <a href="{{ route('user-details', $provider->user) }}" class="font-medium text-blue-600 hover:underline cursor-pointer">{{ $provider->user->name }}</a>
                             </p>
                         @endif
 

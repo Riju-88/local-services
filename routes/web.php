@@ -6,6 +6,7 @@ use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Home;
 use App\Livewire\Providers;
+use App\Livewire\UserDetails;
 use App\Livewire\Test;
 
 // Route::get('/', function () {
@@ -14,7 +15,8 @@ use App\Livewire\Test;
 
 Route::get('/', Home::class)->name('home');
 // Route::get('/{service:slug}/{category:slug?}', Providers::class)->name('providers');
-Route::get('/{service_slug}/{category_slug?}', Providers::class)->name('providers');
+Route::get('/services/{service_slug}/{category_slug?}', Providers::class)->name('providers');
+Route::get('/users/{user}', UserDetails::class)->name('user-details');
 Route::get('/test', Test::class)->name('test');
 Route::redirect('root', '/admin')->name('admin');
 Route::view('dashboard', 'dashboard')

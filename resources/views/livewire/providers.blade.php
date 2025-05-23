@@ -69,7 +69,9 @@
 
                     {{-- Content --}}
                     <div class="p-5 flex flex-col flex-grow">
+                        <a href="{{ route('provider-details', $provider->slug) }}" class="text-gray-800 hover:underline">
                         <h2 class="text-lg font-semibold text-gray-800 mb-1">{{ $provider->business_name }}</h2>
+                        </a>
 
                         @if ($provider->user)
                             <p class="text-sm text-gray-500 mb-1">

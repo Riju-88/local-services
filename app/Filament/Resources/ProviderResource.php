@@ -10,6 +10,9 @@ use App\Models\ServiceCategory; // Import the ServiceCategory model
 use App\Models\User;            // Import the User model
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -49,7 +52,13 @@ class ProviderResource extends Resource
                     ->preload()
                     ->required(), // Keep the required validation
                 Forms\Components\TextInput::make('business_name')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                Forms\Components\TextInput::make('slug')
+                    ->maxLength(255)
+                    ->required()
+                    ->readonly(),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('phone')
@@ -81,6 +90,8 @@ class ProviderResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('business_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),

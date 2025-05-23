@@ -11,6 +11,7 @@ class Provider extends Model
         'user_id',
         'service_category_id',
         'business_name',
+        'slug',
         'description',
         'phone',
         'address',
@@ -29,7 +30,10 @@ class Provider extends Model
     ];
 
 
-    
+      public function getRouteKeyName()
+{
+    return 'slug';
+}
 
     public function reviews()
     {

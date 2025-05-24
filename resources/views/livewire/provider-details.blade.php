@@ -7,8 +7,10 @@
 
             <div class="flex flex-wrap items-center gap-4 text-gray-600 text-sm">
                 <div class="flex items-center gap-1 font-semibold text-green-600">
-                    <span>{{ number_format($provider->average_rating ?? 4.8, 1) }}★</span>
-                    <span class="text-gray-500">({{ number_format($provider->reviews->count() ?? 1414) }} Ratings)</span>
+                    {{-- For average_rating, consider calculating it in your Provider model or ProviderDetails component --}}
+                    <span>{{ number_format($provider->average_rating ?? 0, 1) }}★</span>
+                    {{-- For reviews_count, ensure you're loading it efficiently, e.g., with $provider->loadCount('reviews') in your ProviderDetails component --}}
+                    <span class="text-gray-500">({{ number_format($provider->reviews_count ?? 0) }} Ratings)</span>
                 </div>
 
                 <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-semibold select-none">Claimed</span>
@@ -35,7 +37,7 @@
                 @foreach ($provider->photos as $photo)
                     <img
                         src="{{ asset('storage/' . $photo) }}"
-                        alt="Photo"
+                        alt="Photo of {{ $provider->business_name }}"
                         class="h-44 w-auto rounded-lg object-cover flex-shrink-0 shadow-sm hover:scale-105 transition-transform duration-200"
                         loading="lazy"
                     >
@@ -54,7 +56,7 @@
         </div>
 
         <div class="text-gray-600 flex flex-col sm:flex-row sm:space-x-6 space-y-1 sm:space-y-0">
-            <span><strong>Year Established:</strong> {{ $provider->year_established ?? 2009 }}</span>
+            <span><strong>Year Established:</strong> {{ $provider->year_established ?? 'N/A' }}</span>
             <span><strong>Phone:</strong> {{ $provider->phone }}</span>
             @if ($provider->user)
                 <span><strong>Contact Person:</strong> {{ $provider->user->name }}</span>
@@ -78,20 +80,18 @@
         </div>
     @endif
 
-    {{-- Reviews --}}
+    {{-- Reviews Section --}}
     <div class="bg-white shadow-lg rounded-xl p-6">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Reviews & Ratings</h2>
 
-        @forelse ($provider->reviews as $review)
-            <article class="border-b border-gray-200 pb-5 mb-5 last:border-0 last:mb-0">
-                <header class="flex justify-between items-center text-sm text-gray-600 font-medium">
-                    <span>{{ $review->user->name ?? 'Anonymous' }}</span>
-                    <time datetime="{{ $review->created_at->toDateString() }}">{{ $review->created_at->format('d M Y') }}</time>
-                </header>
-                <p class="mt-2 text-gray-700 leading-relaxed">{{ $review->content }}</p>
-            </article>
-        @empty
-            <p class="text-gray-500">No reviews yet.</p>
-        @endforelse
+        {{-- Check if provider object is available before rendering the Livewire component --}}
+        @if ($provider)
+            {{-- Include the Reviews Livewire component --}}
+            {{-- Make sure your Livewire component is named 'Reviews' --}}
+            {{-- (e.g., app/Livewire/Reviews.php and resources/views/livewire/reviews.blade.php) --}}
+           <livewire:Reviews :providerId="$provider->id" />
+        @else
+            <p class="text-gray-500">Loading review information...</p> {{-- Or some other loading state --}}
+        @endif
     </div>
 </div>

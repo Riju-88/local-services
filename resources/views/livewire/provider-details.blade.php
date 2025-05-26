@@ -35,14 +35,25 @@
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Photos</h2>
             <div class="flex space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 @foreach ($provider->photos as $photo)
-                    <img
+                 <flux:modal.trigger name="provider-image-{{ $provider->id }}">
+                      <img
                         src="{{ asset('storage/' . $photo) }}"
                         alt="Photo of {{ $provider->business_name }}"
                         class="h-44 w-auto rounded-lg object-cover flex-shrink-0 shadow-sm hover:scale-105 transition-transform duration-200"
                         loading="lazy"
                     >
+                </flux:modal.trigger>
+               
                 @endforeach
-            </div>
+             <flux:modal name="provider-image-{{ $provider->id }}">
+                    <img
+                        src="{{ asset('storage/' . $photo) }}"
+                        alt="Photo of {{ $provider->business_name }}"
+                        class="h-9/10 w-auto rounded-lg object-cover flex-shrink-0 shadow-sm hover:scale-105 transition-transform duration-200"
+                        loading="lazy"
+                    >
+                </flux:modal>
+                </div>
         </div>
     @endif
 
@@ -86,9 +97,8 @@
 
         {{-- Check if provider object is available before rendering the Livewire component --}}
         @if ($provider)
+
             {{-- Include the Reviews Livewire component --}}
-            {{-- Make sure your Livewire component is named 'Reviews' --}}
-            {{-- (e.g., app/Livewire/Reviews.php and resources/views/livewire/reviews.blade.php) --}}
            <livewire:Reviews :providerId="$provider->id" />
         @else
             <p class="text-gray-500">Loading review information...</p> {{-- Or some other loading state --}}

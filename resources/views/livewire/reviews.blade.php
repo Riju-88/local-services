@@ -149,8 +149,13 @@
         @if ($review->photos)
           <div class="flex gap-2 mt-3 flex-wrap">
             @foreach ($review->photos as $photo)
+            <flux:modal.trigger name="review-image-{{ $review->id }}">
               <img src="{{ asset('storage/' . $photo) }}" class="w-20 h-20 object-cover rounded-xl border" />
+            </flux:modal.trigger>
             @endforeach
+            <flux:modal name="review-image-{{ $review->id }}">
+              <img src="{{ asset('storage/' . $photo) }}" class="w-9/10 h-9/10 object-cover rounded-xl border" />
+            </flux:modal>
           </div>
         @endif
       </div>

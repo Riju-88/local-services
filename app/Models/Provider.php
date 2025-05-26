@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Provider extends Model
 {
@@ -50,4 +51,15 @@ class Provider extends Model
         return $this->morphTo();
     }
 
+
+     protected static function booted()
+    {
+        static::deleting(function ($provider) {
+            if (is_array($provider->photos)) {
+                foreach ($provider->photos as $photo) {
+                    Storage::disk('public')->delete($photo);
+                }
+            }
+        });
+    }
 }

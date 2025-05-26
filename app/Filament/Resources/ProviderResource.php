@@ -66,7 +66,16 @@ class ProviderResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('photos'),
+                    // file upload for photos
+                Forms\Components\FileUpload::make('photos')
+                    ->multiple()
+                    ->preserveFilenames()
+                    ->directory('providers')
+                    ->panelLayout('grid')
+                    ->reorderable()
+                    ->imageEditor()
+                    ->disk('public')
+                    ->image(),
                 Forms\Components\TextInput::make('latitude')
                     ->numeric(),
                 Forms\Components\TextInput::make('longitude')

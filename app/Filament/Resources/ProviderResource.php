@@ -5,9 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProviderResource\Pages;
 use App\Filament\Resources\ProviderResource\RelationManagers;
 use App\Models\Provider;
-use App\Models\Service;         // Import the Service model
-use App\Models\ServiceCategory; // Import the ServiceCategory model
-use App\Models\User;            // Import the User model
+use App\Models\Service;
+use App\Models\ServiceCategory;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -17,7 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Section;
 
 class ProviderResource extends Resource
 {
@@ -29,60 +29,139 @@ class ProviderResource extends Resource
     {
         return $form
             ->schema([
-                 Forms\Components\MorphToSelect::make('providable')
-                    ->label('Link Provider to') // Or "Service / Category" or similar
-                    ->types([
-                        // Define the types that a Provider can belong to
-                        Forms\Components\MorphToSelect\Type::make(Service::class)
-                            ->titleAttribute('name'), // Attribute to display from Service model
-                        Forms\Components\MorphToSelect\Type::make(ServiceCategory::class)
-                            ->titleAttribute('name')->label('Sub Category'), // Attribute to display from ServiceCategory model
-                        // Add other providable types here if needed in the future
-                        // Forms\Components\MorphToSelect\Type::make(OtherModel::class)->titleAttribute('some_attribute'),
-                    ])
-                    ->searchable() // Allow searching within the selected type's items
-                    ->preload(),   // Preload items for searching
-                    // ->required() // Add this if a provider MUST be associated with something
+                Section::make('Basic Info')
+                    ->schema([
+                        Forms\Components\MorphToSelect::make('providable')
+                            ->label('Link Provider to')
+                            ->types([
+                                Forms\Components\MorphToSelect\Type::make(Service::class)
+                                    ->titleAttribute('name'),
+                                Forms\Components\MorphToSelect\Type::make(ServiceCategory::class)
+                                    ->titleAttribute('name')->label('Sub Category'),
+                            ])
+                            ->searchable()
+                            ->preload(),
 
-                // --- Replacement for user_id ---
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name') // Assumes User model has a 'name' attribute
-                                                   // Use 'email' if 'name' doesn't exist: ->relationship('user', 'email')
-                    ->searchable()
-                    ->preload()
-                    ->required(), // Keep the required validation
-                Forms\Components\TextInput::make('business_name')
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
-                Forms\Components\TextInput::make('slug')
-                    ->maxLength(255)
-                    ->required()
-                    ->readonly(),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('address')
-                    ->maxLength(255),
-                    // file upload for photos
-                Forms\Components\FileUpload::make('photos')
-                    ->multiple()
-                    ->preserveFilenames()
-                    ->directory('providers')
-                    ->panelLayout('grid')
-                    ->reorderable()
-                    ->imageEditor()
-                    ->disk('public')
-                    ->image(),
-                Forms\Components\TextInput::make('latitude')
-                    ->numeric(),
-                Forms\Components\TextInput::make('longitude')
-                    ->numeric(),
-                Forms\Components\Toggle::make('is_active')
-                    ->required()
-                    ->default(true),
+                        Forms\Components\Select::make('user_id')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
+                        Forms\Components\TextInput::make('business_name')
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+
+                        Forms\Components\TextInput::make('slug')
+                            ->maxLength(255)
+                            ->required()
+                            ->readonly(),
+
+                        Forms\Components\Textarea::make('description')->columnSpanFull(),
+
+                        Forms\Components\TextInput::make('phone')->tel()->maxLength(255),
+
+                        Forms\Components\TextInput::make('alternate_phone')->tel()->maxLength(255),
+
+                        Forms\Components\TextInput::make('whatsapp_number')->maxLength(255),
+
+                        Forms\Components\TextInput::make('email')->email(),
+
+                        Forms\Components\TextInput::make('website')->url(),
+
+                        Forms\Components\TextInput::make('address')->maxLength(255),
+
+                        Forms\Components\TextInput::make('area')->maxLength(255),
+
+                        Forms\Components\TextInput::make('pincode')->maxLength(20),
+
+                        Forms\Components\FileUpload::make('photos')
+                            ->multiple()
+                            ->preserveFilenames()
+                            ->directory('providers')
+                            ->panelLayout('grid')
+                            ->reorderable()
+                            ->imageEditor()
+                            ->disk('public')
+                            ->image(),
+
+                        Forms\Components\FileUpload::make('logo')
+                            ->preserveFilenames()
+                            ->directory('provider-logos')
+                            ->image()
+                            ->imageEditor()
+                            ->disk('public'),
+
+                        Forms\Components\Hidden::make('latitude'),
+                        Forms\Components\Hidden::make('longitude'),
+
+                        Forms\Components\Toggle::make('is_active')->required()->default(true),
+                        Forms\Components\Toggle::make('is_verified'),
+                        Forms\Components\Toggle::make('featured'),
+
+                        Forms\Components\TextInput::make('views')->numeric()->default(0),
+                    ]),
+
+                Section::make('Contact Person')
+                    ->schema([
+                        Forms\Components\TextInput::make('contact_person_name')->maxLength(255),
+                        Forms\Components\TextInput::make('contact_person_role')
+                        ->label('Contact Person Role')
+                        ->datalist([
+                            'Manager',
+                            'Owner',
+                            'Supervisor',
+                            'Receptionist',
+                            'Representative',
+                        ])
+                        ->maxLength(255),
+                        Forms\Components\TextInput::make('contact_person_phone')->maxLength(255),
+                        Forms\Components\TextInput::make('contact_person_email')->email(),
+                        Forms\Components\TextInput::make('contact_person_whatsapp')->maxLength(255),
+                    ]),
+
+                Section::make('Additional Info')
+                    ->schema([
+                        Forms\Components\Fieldset::make('working_hours')
+                            ->label('Working Days and Hours')
+                            ->schema([
+                                Forms\Components\CheckboxList::make('working_hours.days')
+                                    ->label('Working Days')
+                                    ->options([
+                                        'Monday' => 'Monday',
+                                        'Tuesday' => 'Tuesday',
+                                        'Wednesday' => 'Wednesday',
+                                        'Thursday' => 'Thursday',
+                                        'Friday' => 'Friday',
+                                        'Saturday' => 'Saturday',
+                                        'Sunday' => 'Sunday',
+                                    ])
+                                    ->columns(2),
+                                        Section::make('Working Hours')
+                                ->schema([
+                                Forms\Components\TimePicker::make('working_hours.from')
+                                    ->label('Working From')
+                                    ->seconds(false)
+                                    ->required(),
+
+                                Forms\Components\TimePicker::make('working_hours.to')
+                                    ->label('Working To')
+                                    ->seconds(false)
+                                    ->required(),
+                            ])
+                            ]),
+
+                        Forms\Components\Select::make('established_year')
+                            ->label('Established Year')
+                            ->options(
+                                collect(range(date('Y'), 1800))->mapWithKeys(fn ($year) => [$year => $year])->toArray()
+                            )
+                            ->searchable()
+                            ->preload(),
+
+                        Forms\Components\TagsInput::make('tags'),
+                    ])
             ]);
     }
 
@@ -90,42 +169,22 @@ class ProviderResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('providable_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('providable_type')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('business_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('address')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('latitude')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('longitude')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\IconColumn::make('is_active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('user.name')->label('User')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('business_name')->searchable(),
+                Tables\Columns\TextColumn::make('phone')->searchable(),
+                Tables\Columns\TextColumn::make('email')->searchable(),
+                Tables\Columns\TextColumn::make('website')->searchable(),
+                Tables\Columns\TextColumn::make('contact_person_name')->label('Contact Person')->searchable(),
+                Tables\Columns\TextColumn::make('area')->searchable(),
+                Tables\Columns\TextColumn::make('pincode')->searchable(),
+                Tables\Columns\IconColumn::make('is_active')->boolean(),
+                Tables\Columns\IconColumn::make('is_verified')->boolean(),
+                Tables\Columns\IconColumn::make('featured')->boolean(),
+                Tables\Columns\TextColumn::make('views')->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -138,9 +197,7 @@ class ProviderResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

@@ -8,27 +8,50 @@ use Illuminate\Support\Facades\Storage;
 class Provider extends Model
 {
     //
-    protected $fillable = [
-        'user_id',
-        'service_category_id',
-        'business_name',
-        'slug',
-        'description',
-        'phone',
-        'address',
-        'photos',
-        'latitude',
-        'longitude',
-        'is_active',
-        'providable_id',
-        'providable_type',
-        
-    ];
+   protected $fillable = [
+    'user_id',
+    'business_name',
+    'slug',
+    'description',
+    'phone',
+    'alternate_phone',
+    'whatsapp_number',
+    'email',
+    'website',
+
+    'contact_person_name',
+    'contact_person_role',
+    'contact_person_phone',
+    'contact_person_email',
+    'contact_person_whatsapp',
+
+    'address',
+    'area',
+    'pincode',
+    'photos',
+    'logo',
+    'latitude',
+    'longitude',
+
+    'working_hours',
+    'established_year',
+    'tags',
+
+    'is_active',
+    'is_verified',
+    'featured',
+    'views',
+
+    'providable_id',
+    'providable_type',
+];
 
 
     protected $casts = [
-        'photos' => 'array',
-    ];
+    'photos' => 'array',
+    'working_hours' => 'array',
+    'tags' => 'array',
+];
 
 
       public function getRouteKeyName()

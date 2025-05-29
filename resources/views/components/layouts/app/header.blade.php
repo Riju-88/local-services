@@ -15,6 +15,9 @@
                 <flux:navbar.item icon="layout-grid" :href="route('home')" :current="request()->routeIs('home')" wire:navigate>
                     {{ __('Home') }}
                 </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('add-provider')" :current="request()->routeIs('add-provider')" wire:navigate>
+                    {{ __('Add Business') }}
+                </flux:navbar.item>
                 <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navbar.item>
@@ -144,7 +147,7 @@
         </flux:sidebar>
 
         {{ $slot }}
-
+        {{-- @livewire('notifications') --}}
         @fluxScripts
     </body>
 </html>

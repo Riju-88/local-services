@@ -10,6 +10,7 @@ use App\Livewire\ProviderDetails;
 use App\Livewire\UserDetails;
 use App\Livewire\Test;
 use App\Livewire\UserProviderForm;
+use App\Livewire\UserProviderList;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -32,6 +33,10 @@ Route::view('dashboard', 'dashboard')
 
     // User Provider Form
 Route::get('/business/new', UserProviderForm::class)->name('add-provider');
+
+// user provider list
+Route::get('/business/manage/{user}', UserProviderList::class)->name('user-providers');
+// user profile
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 

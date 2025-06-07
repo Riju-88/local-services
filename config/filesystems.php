@@ -60,6 +60,14 @@ return [
             'report' => false,
         ],
 
+        'uploads' => [
+        'driver' => 'local',
+        'root' => public_path('uploads'), // or any other public folder you want
+        'url' => env('APP_URL').'/uploads',
+        'visibility' => 'public',
+        ],
+
+
     ],
 
     /*

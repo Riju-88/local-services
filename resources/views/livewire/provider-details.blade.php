@@ -7,7 +7,7 @@
           <div class="avatar">
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-xl">
             @if ($provider->logo)
-              <img src="{{ asset('storage/' . $provider->logo) }}" alt="Business Logo" />
+              <img src="{{ asset('uploads/' . $provider->logo) }}" alt="Business Logo" />
               @else
               <img src="https://picsum.photos/id/237/200/200" alt="Business Logo" />
               @endif
@@ -121,7 +121,7 @@
                 @foreach ($provider->photos as $photo)
                  <flux:modal.trigger name="provider-image-{{ $provider->id }}">
                       <img
-                        src="{{ asset('storage/' . $photo) }}"
+                        src="{{ asset('uploads/' . $photo) }}"
                         alt="Photo of {{ $provider->business_name }}"
                         class="h-44 w-auto rounded-lg object-cover flex-shrink-0 shadow-sm hover:scale-105 transition-transform duration-200 p-2"
                         loading="lazy"
@@ -131,7 +131,7 @@
                 @endforeach
              <flux:modal name="provider-image-{{ $provider->id }}">
                     <img
-                        src="{{ asset('storage/' . $photo) }}"
+                        src="{{ asset('uploads/' . $photo) }}"
                         alt="Photo of {{ $provider->business_name }}"
                         class="h-9/10 w-auto rounded-lg object-cover flex-shrink-0 shadow-sm hover:scale-105 transition-transform duration-200"
                         loading="lazy"

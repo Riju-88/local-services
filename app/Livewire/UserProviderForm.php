@@ -49,6 +49,7 @@ class UserProviderForm extends Component
     public $contact_person_whatsapp;
 
     // Additional Info
+    public $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     public $working_hours_days = [];
     public $working_hours_from;
     public $working_hours_to;
@@ -56,6 +57,59 @@ class UserProviderForm extends Component
     public $tags_input; // For comma-separated tags
 
     public $availableYears = [];
+
+    public $steps = [
+    'Provider & Details',
+    'Contact Information',
+    'Contact Person',
+    'Working Hours & Tags',
+    'Status & Settings'
+    ];
+
+    protected function rules()
+    {
+        return [
+            0 => [
+                'providable_type' => 'required|string',
+                'providable_id' => 'required|integer',
+                'business_name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'photos.*' => 'nullable|image|max:2048',
+                'logo' => 'required|image|max:1024',
+            ],
+            1 => [
+                'phone' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'address' => 'required|string|max:255',
+                'pincode' => 'required|string|max:20',
+                'area' => 'nullable|string|max:255',
+                'alternate_phone' => 'nullable|string|max:255',
+                'whatsapp_number' => 'nullable|string|max:255',
+                'website' => 'nullable|url|max:255',
+            ],
+            2 => [
+                'contact_person_name' => 'required|string|max:255',
+                'contact_person_role' => 'required|string|max:255',
+                'contact_person_phone' => 'required|string|max:255',
+                'contact_person_email' => 'required|email|max:255',
+                'contact_person_whatsapp' => 'nullable|string|max:255',
+            ],
+            3 => [
+                'working_hours_days' => 'nullable|array',
+                'working_hours_days.*' => 'string|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+                'working_hours_from' => 'nullable|required_with:working_hours_to|date_format:H:i',
+                'working_hours_to' => 'nullable|required_with:working_hours_from|date_format:H:i|after:working_hours_from',
+                'established_year' => 'nullable|integer|min:1800|max:' . date('Y'),
+                'tags_input' => 'nullable|string',
+            ],
+            4 => [
+                'is_active' => 'boolean',
+                'is_verified' => 'boolean',
+                'featured' => 'boolean',
+            ],
+        ];
+    }
+    public $currentStep = 0;
 
     public function mount()
     {
@@ -65,44 +119,7 @@ class UserProviderForm extends Component
         $this->is_active = true; // Default value
     }
 
-    protected function rules()
-    {
-        return [
-            'providable_type' => 'required|string',
-            'providable_id' => 'required|integer',
-            'business_name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:providers,slug,' . ($this->providerId ?? null), // Check for existing provider if editing
-            'description' => 'nullable|string',
-            'phone' => 'nullable|string|max:255',
-            'alternate_phone' => 'nullable|string|max:255',
-            'whatsapp_number' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'website' => 'nullable|url|max:255',
-            'address' => 'nullable|string|max:255',
-            'area' => 'nullable|string|max:255',
-            'pincode' => 'nullable|string|max:20',
-            'photos.*' => 'nullable|image|max:2048', // Max 2MB per photo
-            'logo' => 'nullable|image|max:1024', // Max 1MB for logo
-            // 'latitude' => 'nullable|numeric',
-            // 'longitude' => 'nullable|numeric',
-            'is_active' => 'boolean',
-            'is_verified' => 'boolean',
-            'featured' => 'boolean',
-
-            'contact_person_name' => 'nullable|string|max:255',
-            'contact_person_role' => 'nullable|string|max:255',
-            'contact_person_phone' => 'nullable|string|max:255',
-            'contact_person_email' => 'nullable|email|max:255',
-            'contact_person_whatsapp' => 'nullable|string|max:255',
-
-            'working_hours_days' => 'nullable|array',
-            'working_hours_days.*' => 'string|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
-            'working_hours_from' => 'nullable|required_with:working_hours_to|date_format:H:i',
-            'working_hours_to' => 'nullable|required_with:working_hours_from|date_format:H:i|after:working_hours_from',
-            'established_year' => 'nullable|integer|min:1800|max:' . date('Y'),
-            'tags_input' => 'nullable|string',
-        ];
-    }
+    
 
     public function updatedBusinessName($value)
     {
@@ -116,7 +133,9 @@ class UserProviderForm extends Component
 
     public function saveProvider()
     {
-        $this->validate();
+        foreach ($this->rules() as $step => $rulesForStep) {
+        $this->validate($rulesForStep);
+    }
 
         $user = Auth::user();
         if (!$user) {
@@ -127,13 +146,13 @@ class UserProviderForm extends Component
         $photoPaths = [];
         if (!empty($this->photos)) {
             foreach ($this->photos as $photo) {
-                $photoPaths[] = $photo->store('providers', 'public');
+                $photoPaths[] = $photo->store('providers', 'uploads');
             }
         }
 
         $logoPath = null;
         if ($this->logo) {
-            $logoPath = $this->logo->store('provider-logos', 'public');
+            $logoPath = $this->logo->store('provider-logos', 'uploads');
         }
 
         $tagsArray = [];
@@ -206,6 +225,22 @@ Provider::create([
     {
         $this->resetExcept(['services', 'serviceCategories', 'availableYears']); // Keep preloaded data
         $this->mount(); // Re-run mount to set defaults like is_active
+    }
+
+        public function nextStep()
+    {
+        $this->validate($this->rules()[$this->currentStep]);
+        $this->currentStep++;
+    }
+
+    public function previousStep()
+    {
+        $this->currentStep--;
+    }
+
+    public function goToStep($step)
+    {
+        $this->currentStep = $step;
     }
 
     public function render()

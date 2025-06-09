@@ -53,17 +53,13 @@
             @foreach ($providers as $provider)
                 <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
                     {{-- Image --}}
-                    @if (!empty($provider->photos) && isset($provider->photos[0]))
-                        <img src="{{ Storage::url($provider->photos[0]) }}"
+                    @if (!empty($provider->logo))
+                        <img src="{{ asset('uploads/' . $provider->logo) }}"
                              alt="{{ $provider->business_name }}"
                              class="w-full h-48 object-cover">
                     @else
                         <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                            <svg class="w-16 h-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                      d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5
-                                         l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M2.25 19.5h19.5" />
-                            </svg>
+                           <img src="https://picsum.photos/id/106/400/400" alt="{{ $provider->business_name }}" class="w-full h-48 object-cover">
                         </div>
                     @endif
 

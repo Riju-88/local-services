@@ -36,6 +36,9 @@ Route::get('/business/new', UserProviderForm::class)->name('add-provider');
 
 // user provider list
 Route::get('/business/manage/{user}', UserProviderList::class)->name('user-providers');
+
+// edit provider
+Route::get('/business/edit/{provider:slug}', UserProviderForm::class)->name('edit-provider');
 // user profile
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

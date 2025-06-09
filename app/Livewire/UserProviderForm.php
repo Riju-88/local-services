@@ -19,6 +19,9 @@ class UserProviderForm extends Component
     public $providable_id;
     public $services = [];
     public $serviceCategories = [];
+    public $provider;
+    public $providerId;
+
 
     // Basic Info
     public $business_name;
@@ -34,6 +37,8 @@ class UserProviderForm extends Component
     public $pincode;
     public $photos = []; // For multiple file uploads
     public $logo;      // For single file upload
+    public $existingPhotos = []; // for preview
+    public $existingLogo = null; // for preview
     public $latitude;
     public $longitude;
     public $is_active = true; // Default from Filament
@@ -75,7 +80,7 @@ class UserProviderForm extends Component
                 'business_name' => 'required|string|max:255',
                 'description' => 'required|string',
                 'photos.*' => 'nullable|image|max:2048',
-                'logo' => 'required|image|max:1024',
+                'logo' => 'nullable|image|max:1024',
             ],
             1 => [
                 'phone' => 'required|string|max:255',
@@ -91,7 +96,7 @@ class UserProviderForm extends Component
                 'contact_person_name' => 'required|string|max:255',
                 'contact_person_role' => 'required|string|max:255',
                 'contact_person_phone' => 'required|string|max:255',
-                'contact_person_email' => 'required|email|max:255',
+                'contact_person_email' => 'nullable|email|max:255',
                 'contact_person_whatsapp' => 'nullable|string|max:255',
             ],
             3 => [
@@ -111,15 +116,53 @@ class UserProviderForm extends Component
     }
     public $currentStep = 0;
 
-    public function mount()
+    public function mount(Provider $provider = null)
     {
         $this->services = Service::orderBy('name')->get();
         $this->serviceCategories = ServiceCategory::orderBy('name')->get();
         $this->availableYears = collect(range(date('Y'), 1800))->mapWithKeys(fn ($year) => [$year => $year])->toArray();
         $this->is_active = true; // Default value
+
+        if ($provider) {
+        $this->providerId = $provider->id;
+        $this->loadProviderData($provider);
+    }
     }
 
-    
+    public function loadProviderData(Provider $provider)
+    {
+        $this->provider = $provider;
+        $this->providable_type = $this->provider->providable_type;
+        $this->providable_id = $this->provider->providable_id;
+        $this->business_name = $this->provider->business_name;
+        $this->slug = $this->provider->slug;
+        $this->description = $this->provider->description;
+        $this->phone = $this->provider->phone;
+        $this->alternate_phone = $this->provider->alternate_phone;
+        $this->whatsapp_number = $this->provider->whatsapp_number;
+        $this->email = $this->provider->email;
+        $this->website = $this->provider->website;
+        $this->address = $this->provider->address;
+        $this->area = $this->provider->area;
+        $this->pincode = $this->provider->pincode;
+        $this->existingPhotos = $this->provider->photos ?? [];
+        $this->existingLogo = $this->provider->logo ?? null;
+        // $this->latitude = $this->provider->latitude;
+        // $this->longitude = $this->provider->longitude;
+        $this->contact_person_name = $this->provider->contact_person_name;
+        $this->contact_person_role = $this->provider->contact_person_role;
+        $this->contact_person_phone = $this->provider->contact_person_phone;
+        $this->contact_person_email = $this->provider->contact_person_email;
+        $this->contact_person_whatsapp = $this->provider->contact_person_whatsapp;
+        $this->working_hours_days = $provider->working_hours['days'] ?? [];
+        $this->working_hours_from = $provider->working_hours['from'] ?? '';
+        $this->working_hours_to   = $provider->working_hours['to'] ?? '';
+        $this->tags_input = is_array($this->provider->tags) ? implode(', ', $this->provider->tags) : '';
+        $this->established_year = $this->provider->established_year;
+        $this->is_active = $this->provider->is_active;
+        // $this->is_verified = $this->provider->is_verified;
+        // $this->featured = $this->provider->featured;
+    }
 
     public function updatedBusinessName($value)
     {
@@ -143,17 +186,33 @@ class UserProviderForm extends Component
             return redirect()->route('login'); // Or wherever your login route is
         }
 
-        $photoPaths = [];
+       // Prepare photos paths
         if (!empty($this->photos)) {
+            $photoPaths = [];
             foreach ($this->photos as $photo) {
-                $photoPaths[] = $photo->store('providers', 'uploads');
+                if (method_exists($photo, 'store')) {
+                    $photoPaths[] = $photo->store('providers', 'uploads');
+                } else {
+                    // Existing path
+                    $photoPaths[] = $photo;
+                }
             }
+        } else {
+            // No new photos uploaded - keep existing photos
+            $photoPaths = $this->existingPhotos ?? [];
         }
 
-        $logoPath = null;
-        if ($this->logo) {
+        // Prepare logo path
+        if ($this->logo && method_exists($this->logo, 'store')) {
             $logoPath = $this->logo->store('provider-logos', 'uploads');
+        } elseif ($this->logo) {
+            // existing logo path string
+            $logoPath = $this->logo;
+        } else {
+            // No new logo uploaded - keep existing logo
+            $logoPath = $this->existingLogo;
         }
+
 
         $tagsArray = [];
         if (!empty($this->tags_input)) {
@@ -179,7 +238,7 @@ class UserProviderForm extends Component
 // $photoPaths is already a PHP array:
 // $photoPaths[] = $photo->store('providers', 'public');
 
-Provider::create([
+    $providerData = [
     'user_id' => $user->id,
     'providable_type' => $this->providable_type,
     'providable_id' => $this->providable_id,
@@ -213,9 +272,18 @@ Provider::create([
     'working_hours' => $workingHours, // Pass the PHP array directly
     'established_year' => $this->established_year,
     'tags' => $tagsArray ?: null,     // Pass the PHP array (or null if $tagsArray is empty)
-]);
+    ];
+         $statusMsg = '';
+        if ($this->providerId) {
+        $provider = Provider::findOrFail($this->providerId);
+        $provider->update($providerData);
+        $statusMsg ='updated';
+        } else {
+            $provider = Provider::create($providerData);
+            $statusMsg = 'created';
+        }
 
-        session()->flash('success', 'Provider profile created successfully!');
+        session()->flash('success', 'Provider profile '.$statusMsg.' successfully!');
         // Optionally redirect or reset form
         // return redirect()->to('/dashboard/my-provider-profile');
         $this->resetForm();

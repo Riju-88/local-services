@@ -5,15 +5,55 @@
         {{ session('success') }}
     </div>
 @endif
-    {{-- list all providers from user --}}
+
+ <div class="container mx-auto max-w-3xl">
+   
+    <h1 class="text-2xl font-bold mb-6">Businesses of {{ auth()->user()->name }}</h1>
+    
+    <div class="space-y-4">
+     {{-- list all providers from user --}}
     @foreach ($providers as $provider)
-      {{-- provider cards --}}
-      <div class="flex flex-row items-center justify-center max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-6">
-      <div class="flex flex-col items-center pb-10">
-       {{ $provider->business_name }}
+      <!-- Business Item 5 -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <!-- Logo -->
+              @if ($provider->logo)
+              <div class="avatar">
+                <div class="w-16 h-16 rounded-full">
+                  <img src="{{ asset('uploads/' . $provider->logo) }}" alt="Business Logo" />
+                </div>
+              </div>
+              @else
+              <div class="avatar">
+                <div class="w-16 h-16 rounded-full">
+                  <img src="https://picsum.photos/id/106/200/200" alt="Business Logo" />
+                </div>
+              </div>
+              @endif
+              <div>
+                <h2 class="text-xl font-semibold"><a  href="{{ route('provider-details', $provider) }}" class="hover:underline pointer"> {{ $provider->business_name }}
+                </a></h2>
+                <p class="text-sm opacity-70"> {{ $provider->address }}</p>
+              </div>
+            </div>
+            <flux:dropdown>
+                <flux:button icon="ellipsis-vertical" variant="ghost" inset class=" text-gray-700 dark:text-white">
+                    
+                </flux:button>
+                <flux:menu>
+                    <flux:menu.item icon="pencil" href="{{ route('edit-provider', $provider) }}">Edit</flux:menu.item>
+                    <flux:menu.separator />
+                    <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>
+                </flux:menu>
+            </flux:dropdown>
+          </div>
+          
+        </div>
       </div>
-      <flux:button wire:click="delete( {{$provider->id}} )" variant="danger" class="w-full">Delete
-      </flux:button>
-      </div>
-    @endforeach
+      @endforeach
+    </div>
+  </div>
+   
 </div>

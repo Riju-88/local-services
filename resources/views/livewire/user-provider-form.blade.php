@@ -1,5 +1,12 @@
 <div class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Create Provider Profile</h2>
+    {{-- session --}}
+    @if (session()->has('success'))
+        <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
+
     {{-- errors --}}
     @if ($errors->any())
     <div class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
@@ -95,44 +102,65 @@
                 </div>
 
                 <!-- Photos -->
-                <div>
-                    <label for="photos" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Photos (select multiple)
-                    </label>
-                    <input type="file" id="photos" wire:model="photos" multiple
-                        class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800 p-2">
-                    <div wire:loading wire:target="photos" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Uploading...</div>
-                    @error('photos.*') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
-                    @if ($photos)
-                        <div class="mt-3">
-                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Previews:</p>
-                            <div class="flex flex-wrap gap-2">
-                                @foreach ($photos as $key => $photo)
-                                    @if(method_exists($photo, 'temporaryUrl'))
-                                        <img src="{{ $photo->temporaryUrl() }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
+<div>
+    <label for="photos" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Photos (select multiple)
+    </label>
+    <input type="file" id="photos" wire:model="photos" multiple
+        class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800 p-2">
+    
+    <div wire:loading wire:target="photos" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Uploading...</div>
+    @error('photos.*') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+
+    <div class="mt-3 space-y-1">
+        @if (!empty($existingPhotos))
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Previously Uploaded:</p>
+            <div class="flex flex-wrap gap-2">
+                @foreach ($existingPhotos as $url)
+                    <img src="{{ asset('uploads/' . $url) }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
+                @endforeach
+            </div>
+        @endif
+
+        @if ($photos)
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">New Uploads:</p>
+            <div class="flex flex-wrap gap-2">
+                @foreach ($photos as $photo)
+                    @if (method_exists($photo, 'temporaryUrl'))
+                        <img src="{{ $photo->temporaryUrl() }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
                     @endif
-                </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</div>
+
 
                 <!-- Logo -->
-                <div>
-                    <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Logo
-                    </label>
-                    <input type="file" id="logo" wire:model="logo"
-                        class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800">
-                    <div wire:loading wire:target="logo" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Uploading...</div>
-                    @error('logo') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
-                    @if ($logo && method_exists($logo, 'temporaryUrl'))
-                        <div class="mt-3">
-                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preview:</p>
-                            <img src="{{ $logo->temporaryUrl() }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
-                        </div>
-                    @endif
-                </div>
+<div>
+    <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Logo
+    </label>
+    <input type="file" id="logo" wire:model="logo"
+        class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800">
+    
+    <div wire:loading wire:target="logo" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Uploading...</div>
+    @error('logo') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+
+    <div class="mt-3">
+        @if (!empty($existingLogo))
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Logo:</p>
+            <img src="{{ asset('uploads/' . $existingLogo) }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
+        @endif
+
+        @if ($logo && method_exists($logo, 'temporaryUrl'))
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">New Upload:</p>
+            <img src="{{ $logo->temporaryUrl() }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
+        @endif
+    </div>
+</div>
+
+
             </fieldset>
         @endif
 
@@ -372,7 +400,26 @@
             <fieldset class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-4">
                 <legend class="px-2 text-lg font-medium text-gray-900 dark:text-gray-100">Status & Visibility</legend>
 
-              <flux:switch label="Active (Provider will be visible)" align="left" id="is_active" wire:model="is_active" value="1" />
+            {{--  --}}
+            <div class="flex items-center space-x-3">
+        <!-- Toggle Switch -->
+        <button
+            type="button"
+            wire:click="$set('is_active', {{ $is_active ? 'false' : 'true' }})"
+            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none {{ $is_active ? 'bg-green-500' : 'bg-gray-400' }}"
+        >
+            <span
+                class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 {{ $is_active ? 'translate-x-6' : 'translate-x-1' }}"
+            ></span>
+        </button>
+
+        <!-- Dynamic Text -->
+        <span class="text-sm font-medium {{ $is_active ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400' }}">
+            {{ $is_active ? 'Active (Provider is visible)' : 'Inactive (Provider is hidden)' }}
+        </span>
+    </div>
+
+            {{--  --}}
          @error('is_active') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                
 

@@ -168,6 +168,7 @@
 
         {{ $slot }}
         {{-- @livewire('notifications') --}}
+        <livewire:toast-notification />
         @fluxScripts
     </body>
 </html>

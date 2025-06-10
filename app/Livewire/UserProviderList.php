@@ -21,8 +21,12 @@ class UserProviderList extends Component
     {
         Provider::find($id)->delete();
         $this->providers = Provider::where('user_id', $this->user->id)->get();
-        // notification
-        session()->flash('success', 'Provider deleted successfully');
+        // notification dispatch
+        $this->dispatch('showToast', 
+        type: 'success', 
+        message: 'Provider profile deleted successfully!',
+        duration: 5000
+    );
     }
     public function render()
     {

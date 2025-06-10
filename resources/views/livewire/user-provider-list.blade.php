@@ -45,15 +45,32 @@
                 <flux:menu>
                     <flux:menu.item icon="pencil" href="{{ route('edit-provider', $provider) }}">Edit</flux:menu.item>
                     <flux:menu.separator />
-                    <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>
+                     <flux:modal.trigger name="confirm-delete-{{ $provider->id }}">
+          <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>
+        </flux:modal.trigger>
                 </flux:menu>
             </flux:dropdown>
           </div>
-          
+          {{--  --}}
+           <flux:modal name="confirm-delete-{{ $provider->id }}" class="min-w-[22rem] space-y-6" @teleport="body">
+    <flux:heading size="lg">Delete {{ $provider->business_name }}?</flux:heading>
+    <flux:text>You’re about to delete this provider. This action cannot be undone.</flux:text>
+
+    <div class="flex gap-2 justify-end">
+      <flux:spacer />
+      <flux:modal.close>
+        <flux:button variant="ghost">Cancel</flux:button>
+      </flux:modal.close>
+      <flux:button type="button" variant="danger" wire:click="delete({{ $provider->id }})">
+        Delete
+      </flux:button>
+    </div>
+  </flux:modal>
+          {{--  --}}
         </div>
       </div>
       @endforeach
     </div>
   </div>
-   
+  
 </div>

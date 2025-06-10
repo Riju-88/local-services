@@ -182,7 +182,11 @@ class UserProviderForm extends Component
 
         $user = Auth::user();
         if (!$user) {
-            session()->flash('error', 'You must be logged in to create a provider profile.');
+             $this->dispatch('showToast', 
+        type: 'error', 
+        message: 'Please login to continue',
+        duration: 5000
+    );
             return redirect()->route('login'); // Or wherever your login route is
         }
 
@@ -278,12 +282,18 @@ class UserProviderForm extends Component
         $provider = Provider::findOrFail($this->providerId);
         $provider->update($providerData);
         $statusMsg ='updated';
+
         } else {
             $provider = Provider::create($providerData);
             $statusMsg = 'created';
+
         }
 
-        session()->flash('success', 'Provider profile '.$statusMsg.' successfully!');
+         $this->dispatch('showToast', 
+        type: 'success', 
+        message: 'Provider profile '.$statusMsg.' successfully!',
+        duration: 5000
+    );
         // Optionally redirect or reset form
         // return redirect()->to('/dashboard/my-provider-profile');
         $this->resetForm();

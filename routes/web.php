@@ -32,13 +32,13 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
     // User Provider Form
-Route::get('/business/new', UserProviderForm::class)->name('add-provider');
+Route::get('/business/new/{provider?}', UserProviderForm::class)->name('add-provider');
 
 // user provider list
 Route::get('/business/manage/{user}', UserProviderList::class)->name('user-providers');
 
 // edit provider
-Route::get('/business/edit/{provider:slug}', UserProviderForm::class)->name('edit-provider');
+Route::get('/business/edit/{provider}', UserProviderForm::class)->name('edit-provider');
 // user profile
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

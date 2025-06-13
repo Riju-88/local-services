@@ -116,8 +116,9 @@ class UserProviderForm extends Component
     }
     public $currentStep = 0;
 
-    public function mount(Provider $provider = null)
-    {
+    public function mount(Provider $provider)
+    {   
+        $this->provider = $provider;
         $this->services = Service::orderBy('name')->get();
         $this->serviceCategories = ServiceCategory::orderBy('name')->get();
         $this->availableYears = collect(range(date('Y'), 1800))->mapWithKeys(fn ($year) => [$year => $year])->toArray();
@@ -277,21 +278,21 @@ class UserProviderForm extends Component
     'established_year' => $this->established_year,
     'tags' => $tagsArray ?: null,     // Pass the PHP array (or null if $tagsArray is empty)
     ];
-         $statusMsg = '';
+        
         if ($this->providerId) {
         $provider = Provider::findOrFail($this->providerId);
         $provider->update($providerData);
-        $statusMsg ='updated';
+        
 
         } else {
             $provider = Provider::create($providerData);
-            $statusMsg = 'created';
+            
 
         }
 
          $this->dispatch('showToast', 
         type: 'success', 
-        message: 'Provider profile '.$statusMsg.' successfully!',
+        message: 'Provider profile updated successfully!',
         duration: 5000
     );
         // Optionally redirect or reset form
@@ -301,8 +302,24 @@ class UserProviderForm extends Component
 
     private function resetForm()
     {
-        $this->resetExcept(['services', 'serviceCategories', 'availableYears']); // Keep preloaded data
-        $this->mount(); // Re-run mount to set defaults like is_active
+         $this->resetExcept(['services', 'serviceCategories', 'availableYears', 'providerId']);
+
+    if ($this->providerId) {
+        $provider = Provider::find($this->providerId);
+        if ($provider) {
+            $this->mount($provider); // call mount with the provider
+        }
+    } else {
+
+         $this->dispatch('showToast', 
+        type: 'success', 
+        message: 'Provider profile created successfully!',
+        duration: 5000
+    );
+       // Redirect to the user's provider list
+        return $this->redirect(route('user-providers', ['user' => Auth::id()]), navigate: true);
+
+    }
     }
 
         public function nextStep()

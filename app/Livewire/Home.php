@@ -13,7 +13,7 @@ class Home extends Component
 
     public function mount()
     {
-         $this->services = Service::with('serviceCategory')->get();
+         $this->services = Service::with('serviceCategory', 'providers')->get();
     }
 
   

@@ -1,3 +1,56 @@
+<div>
+{{-- carousel  --}}
+<div 
+    x-data="carousel()" 
+    x-init="init()" 
+    class="max-w-3xl mx-auto mt-8 relative touch-pan-y touch-auto select-none" 
+    @touchstart.passive="startTouch($event)" 
+    @touchend.passive="endTouch($event)"
+>
+    <!-- Slides -->
+    <div class="relative h-64 overflow-hidden rounded-xl shadow-lg">
+        {{-- @foreach ($slides as $index => $slide) --}}
+        <template x-for="(slide, i) in slides" :key="i">
+            <div 
+                x-show="current === i" 
+                x-transition:enter="transition-opacity duration-700 ease-in-out"
+                x-transition:leave="transition-opacity duration-700 ease-in-out"
+                class="absolute inset-0"
+                :style="`z-index: ${current === i ? 1 : 0}; opacity: ${current === i ? 1 : 0}`"
+            >
+                <img :src="slide.image" class="w-full h-full object-cover rounded-xl" />
+                <div class="absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-sm text-white p-4 rounded-b-xl">
+                    <h3 class="text-lg font-semibold" x-text="slide.title"></h3>
+                    <p class="text-sm" x-text="slide.desc"></p>
+                </div>
+            </div>
+        </template>
+        {{-- @endforeach --}}
+    </div>
+
+    <!-- Controls -->
+    <button @click="prev()" class="absolute left-2 top-1/2 -translate-y-1/2 text-white bg-black/40 hover:bg-black/60 p-2 rounded-full z-10">
+        &#8592;
+    </button>
+    <button @click="next()" class="absolute right-2 top-1/2 -translate-y-1/2 text-white bg-black/40 hover:bg-black/60 p-2 rounded-full z-10">
+        &#8594;
+    </button>
+
+    <!-- Indicators -->
+            <div class="flex justify-center gap-2 mt-4">
+                <template x-for="(slide, i) in slides" :key="i">
+                    <button 
+                        @click="goTo(i)" 
+                        :class="current === i 
+                            ? 'bg-gray-900 dark:bg-white' 
+                            : 'bg-gray-400 dark:bg-white/30'" 
+                        class="w-2.5 h-2.5 rounded-full transition-colors duration-300">
+                    </button>
+        </template>
+    </div>
+</div>
+{{-- end carousel --}}
+
 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-5">
     @foreach ($services as $service)
         @php
@@ -120,4 +173,52 @@
             </flux:modal>
         </div>
     @endforeach
+</div>
+
+{{-- carousel script --}}
+<script>
+function carousel() {
+    return {
+        slides: [
+            { image: 'https://picsum.photos/id/296/800/400', title: 'Modern Slide 1', desc: 'Sleek card style with smooth transitions.' },
+            { image: 'https://picsum.photos/seed/picsum/800/400', title: 'Modern Slide 2', desc: 'Compact, elegant, and mobile-friendly.' },
+            { image: 'https://picsum.photos/id/324/800/400', title: 'Modern Slide 3', desc: 'Responsive and minimal carousel card.' },
+        ],
+        current: 0,
+        interval: null,
+        init() {
+            this.startAutoplay();
+        },
+        startAutoplay() {
+            this.interval = setInterval(() => this.next(), 5000);
+        },
+        resetAutoplay() {
+            clearInterval(this.interval);
+            this.startAutoplay();
+        },
+        next() {
+            this.current = (this.current + 1) % this.slides.length;
+            this.resetAutoplay();
+        },
+        prev() {
+            this.current = (this.current - 1 + this.slides.length) % this.slides.length;
+            this.resetAutoplay();
+        },
+        goTo(index) {
+            this.current = index;
+            this.resetAutoplay();
+        },
+        startX: 0,
+        startTouch(e) {
+            this.startX = e.touches[0].clientX;
+        },
+        endTouch(e) {
+            const endX = e.changedTouches[0].clientX;
+            const diff = endX - this.startX;
+            if (diff > 50) this.prev();
+            else if (diff < -50) this.next();
+        }
+    };
+}
+</script>
 </div>

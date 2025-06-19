@@ -177,11 +177,7 @@ class UserProviderForm extends Component
 
     public function saveProvider()
     {
-        foreach ($this->rules() as $step => $rulesForStep) {
-        $this->validate($rulesForStep);
-    }
-
-        $user = Auth::user();
+         $user = Auth::user();
         if (!$user) {
              $this->dispatch('showToast', 
         type: 'error', 
@@ -190,6 +186,12 @@ class UserProviderForm extends Component
     );
             return redirect()->route('login'); // Or wherever your login route is
         }
+
+        foreach ($this->rules() as $step => $rulesForStep) {
+        $this->validate($rulesForStep);
+    }
+
+       
 
        // Prepare photos paths
         if (!empty($this->photos)) {
@@ -279,20 +281,20 @@ class UserProviderForm extends Component
     'tags' => $tagsArray ?: null,     // Pass the PHP array (or null if $tagsArray is empty)
     ];
         
+        $msg = '';
         if ($this->providerId) {
         $provider = Provider::findOrFail($this->providerId);
         $provider->update($providerData);
-        
+        $msg = 'updated';
 
         } else {
             $provider = Provider::create($providerData);
-            
-
+            $msg = 'created';
         }
 
          $this->dispatch('showToast', 
         type: 'success', 
-        message: 'Provider profile updated successfully!',
+        message: 'Provider profile '.$msg.' successfully!',
         duration: 5000
     );
         // Optionally redirect or reset form
@@ -311,11 +313,6 @@ class UserProviderForm extends Component
         }
     } else {
 
-         $this->dispatch('showToast', 
-        type: 'success', 
-        message: 'Provider profile created successfully!',
-        duration: 5000
-    );
        // Redirect to the user's provider list
         return $this->redirect(route('user-providers', ['user' => Auth::id()]), navigate: true);
 

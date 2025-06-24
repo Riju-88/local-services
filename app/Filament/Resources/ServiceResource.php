@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Guava\FilamentIconPicker\Forms\IconPicker;
 
 class ServiceResource extends Resource
 {
@@ -40,8 +41,10 @@ class ServiceResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('icon')
-                    ->maxLength(255),
+                // Forms\Components\TextInput::make('icon')
+                //     ->maxLength(255),
+                    IconPicker::make('icon')
+                    ->columns(5),
             ]);
     }
 

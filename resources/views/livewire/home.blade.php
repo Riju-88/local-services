@@ -73,7 +73,7 @@
             @else
                 <a href="{{ route('providers', ['service_slug' => $service->slug]) }}"
                    class="w-full h-full cursor-pointer transform transition-all duration-300 hover:shadow-lg rounded-md bg-white shadow-sm p-4 flex flex-col items-center justify-center space-y-2">
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-indigo-100 text-white shadow-inner">
+                    <div class="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 text-white shadow-inner">
                         @svg($service->icon, 'w-8 h-8')
                     </div>
                     <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $service->name }}</span>

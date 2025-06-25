@@ -15,15 +15,19 @@
                 <flux:navbar.item icon="layout-grid" :href="route('home')" :current="request()->routeIs('home')" wire:navigate>
                     {{ __('Home') }}
                 </flux:navbar.item>
+                @auth
                 <flux:navbar.item icon="layout-grid" :href="route('add-provider')" :current="request()->routeIs('add-provider')" wire:navigate>
                     {{ __('Add Business') }}
                 </flux:navbar.item>
+                @endauth
                 <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navbar.item>
+                @auth
                 <flux:navbar.item icon="layout-grid" :href="route('admin')" :current="request()->routeIs('admin')" target="_blank">
                     {{ __('Admin') }}
                 </flux:navbar.item>
+                @endauth
             </flux:navbar>
 
             <flux:spacer />
@@ -76,6 +80,14 @@
                     :initials="auth()->user()->initials()"
                 />
                 @endauth
+                @guest
+                {{-- login --}}
+                <flux:navbar.item
+                    href="{{ route('login') }}"
+                    :label="__('Login')"
+                >{{ __('Login') }}</flux:navbar.item>
+                @endguest
+               
 
                 <flux:menu>
                     <flux:menu.radio.group>

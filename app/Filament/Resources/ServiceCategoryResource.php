@@ -16,6 +16,7 @@ use Filament\Forms\Set;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Guava\FilamentIconPicker\Forms\IconPicker;
 
 class ServiceCategoryResource extends Resource
 {
@@ -42,8 +43,8 @@ class ServiceCategoryResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('icon')
-                    ->maxLength(255),
+                IconPicker::make('icon')
+                    ->columns(5),
             ]);
     }
 

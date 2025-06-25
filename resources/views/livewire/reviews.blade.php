@@ -106,6 +106,7 @@
       @endif
 
       {{-- Submit / Cancel --}}
+      @auth
       <div class="flex justify-end gap-2 mt-4">
         @if($editingReviewId)
           <button 
@@ -123,6 +124,11 @@
           {{ $editingReviewId ? 'Update' : 'Submit' }} Review
         </button>
       </div>
+      @else
+        <div class="text-center mt-4">
+          <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Log in</a> to post a review
+        </div>
+      @endauth
     </form>
   </div>
 

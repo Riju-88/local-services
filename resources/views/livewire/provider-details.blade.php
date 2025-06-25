@@ -34,13 +34,19 @@
             <!-- Tags -->
             <div class="flex flex-wrap gap-2 my-2">
               @forelse ($provider->tags ?? [] as $tag)
-              <span class="badge badge-outline">{{ $tag }}</span>
+              <span class="badge border rounded-full px-2 bg-gray-800 dark:bg-gray-200 text-gray-100 dark:text-gray-900">{{ $tag }}</span>
               @empty
               <span class="badge badge-outline">No Tags</span>
               <span class="badge badge-outline">No Tags</span>
               @endforelse
             </div>
             
+            {{-- Rating --}}
+            <div class="flex items-center gap-2">
+              
+              <span class="text-sm px-2 rounded-md bg-blue-700  text-gray-200">{{ $provider->reviews->avg('rating') }}</span>
+            </div>
+             
             <!-- Established Year -->
             <p class="text-sm text-base-content/70">
              <i>Since</i> 
@@ -141,6 +147,20 @@
         </div>
     @endif
         </section>
+
+         {{-- Reviews Section --}}
+    <div class="bg-white shadow-lg rounded-xl p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Reviews & Ratings</h2>
+
+        {{-- Check if provider object is available before rendering the Livewire component --}}
+        @if ($provider)
+
+            {{-- Include the Reviews Livewire component --}}
+           <livewire:Reviews :providerId="$provider->id" />
+        @else
+            <p class="text-gray-500">Loading review information...</p> {{-- Or some other loading state --}}
+        @endif
+    </div>
       </div>
 
       <!-- Right Column (1/3 width on large screens) -->

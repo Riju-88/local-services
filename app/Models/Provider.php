@@ -32,8 +32,9 @@ class Provider extends Model
     'pincode',
     'photos',
     'logo',
-    'latitude',
-    'longitude',
+    'banner',
+    // 'latitude',
+    // 'longitude',
 
     'working_hours',
     'established_year',
@@ -77,6 +78,10 @@ class Provider extends Model
     }
 
 
+    public function scopeFeatured($query)
+    {
+        return $query->where('featured', 1);
+    }
      protected static function booted()
     {
         static::deleting(function ($provider) {

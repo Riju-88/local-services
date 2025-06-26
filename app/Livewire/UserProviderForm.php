@@ -37,8 +37,10 @@ class UserProviderForm extends Component
     public $pincode;
     public $photos = []; // For multiple file uploads
     public $logo;      // For single file upload
+    public $banner;
     public $existingPhotos = []; // for preview
     public $existingLogo = null; // for preview
+    public $existingBanner = null;
     public $latitude;
     public $longitude;
     public $is_active = true; // Default from Filament
@@ -81,6 +83,7 @@ class UserProviderForm extends Component
                 'description' => 'required|string',
                 'photos.*' => 'nullable|image|max:2048',
                 'logo' => 'nullable|image|max:1024',
+                'banner' => 'nullable|image|max:5120',
             ],
             1 => [
                 'phone' => 'required|string|max:255',
@@ -148,6 +151,7 @@ class UserProviderForm extends Component
         $this->pincode = $this->provider->pincode;
         $this->existingPhotos = $this->provider->photos ?? [];
         $this->existingLogo = $this->provider->logo ?? null;
+        $this->existingBanner = $this->provider->banner ?? null;
         // $this->latitude = $this->provider->latitude;
         // $this->longitude = $this->provider->longitude;
         $this->contact_person_name = $this->provider->contact_person_name;
@@ -220,6 +224,17 @@ class UserProviderForm extends Component
             $logoPath = $this->existingLogo;
         }
 
+        // Prepare banner path
+        // Only create the banner path if a new banner is uploaded
+        if ($this->banner && method_exists($this->banner, 'store')) {
+            $bannerPath = $this->banner->store('provider-banners', 'uploads');
+        } elseif ($this->banner) {
+            // existing banner path string
+            $bannerPath = $this->banner;
+        } else {
+            // No new banner uploaded - keep existing banner
+            $bannerPath = $this->existingBanner;
+        }
 
         $tagsArray = [];
         if (!empty($this->tags_input)) {
@@ -262,8 +277,9 @@ class UserProviderForm extends Component
     'pincode' => $this->pincode,
     'photos' => $photoPaths ?: null, // Pass the PHP array directly
     'logo' => $logoPath,
-    'latitude' => $this->latitude,
-    'longitude' => $this->longitude,
+    'banner' => $bannerPath,
+    // 'latitude' => $this->latitude,
+    // 'longitude' => $this->longitude,
     'is_active' => (bool)$this->is_active,
     'is_verified' => (bool)$this->is_verified,
     'featured' => (bool)$this->featured,

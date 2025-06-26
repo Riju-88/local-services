@@ -24,7 +24,7 @@
         @foreach ($steps as $index => $stepName)
             <div class="flex flex-col items-center w-full">
                 <div class="w-8 h-8 flex items-center justify-center rounded-full 
-                    {{ $currentStep > $index ? 'bg-green-500' : ($currentStep == $index ? 'bg-blue-600' : 'bg-gray-300') }} text-white font-medium">
+                    {{ $currentStep > $index ? 'bg-green-500' : ($currentStep == $index ? 'bg-blue-600' : 'bg-gray-400') }} text-white font-medium">
                     {{ $index + 1 }}
                 </div>
                 <span class="mt-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">{{ $stepName }}</span>
@@ -137,29 +137,52 @@
 
 
                 <!-- Logo -->
-<div>
-    <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-        Logo
-    </label>
-    <input type="file" id="logo" wire:model="logo"
-        class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800">
-    
-    <div wire:loading wire:target="logo" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Uploading...</div>
-    @error('logo') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+    <div>
+        <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Logo
+        </label>
+        <input type="file" id="logo" wire:model="logo"
+            class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800">
+        
+        <div wire:loading wire:target="logo" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Uploading...</div>
+        @error('logo') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
 
-    <div class="mt-3">
-        @if (!empty($existingLogo))
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Logo:</p>
-            <img src="{{ asset('uploads/' . $existingLogo) }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
-        @endif
+        <div class="mt-3">
+            @if (!empty($existingLogo))
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Logo:</p>
+                <img src="{{ asset('uploads/' . $existingLogo) }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
+            @endif
 
-        @if ($logo && method_exists($logo, 'temporaryUrl'))
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">New Upload:</p>
-            <img src="{{ $logo->temporaryUrl() }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
-        @endif
+            @if ($logo && method_exists($logo, 'temporaryUrl'))
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">New Upload:</p>
+                <img src="{{ $logo->temporaryUrl() }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
+            @endif
+        </div>
     </div>
-</div>
 
+    {{-- banner --}}
+        <div>
+        <label for="banner" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Banner
+        </label>
+        <input type="file" id="banner" wire:model="banner"
+            class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800">
+        
+        <div wire:loading wire:target="logo" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Uploading...</div>
+        @error('logo') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+
+        <div class="mt-3">
+            @if (!empty($existingBanner))
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Banner:</p>
+                <img src="{{ asset('uploads/' . $existingBanner) }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
+            @endif
+
+            @if ($banner && method_exists($banner, 'temporaryUrl'))
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">New Upload:</p>
+                <img src="{{ $banner->temporaryUrl() }}" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-600">
+            @endif
+        </div>
+    </div>
 
             </fieldset>
         @endif

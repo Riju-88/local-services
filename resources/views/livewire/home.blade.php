@@ -72,8 +72,8 @@
                 </flux:modal.trigger>
             @else
                 <a href="{{ route('providers', ['service_slug' => $service->slug]) }}"
-                   class="w-full h-full cursor-pointer transform transition-all duration-300 hover:shadow-lg rounded-md bg-white shadow-sm p-4 flex flex-col items-center justify-center space-y-2">
-                    <div class="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 text-white shadow-inner">
+                   class="w-full h-full cursor-pointer transform transition-all duration-300 hover:shadow-lg rounded-md bg-white dark:bg-transparent shadow-sm p-4 flex flex-col items-center justify-center space-y-2">
+                    <div class="w-16 h-16 flex items-center justify-center rounded-full bg-slate-400 text-white shadow-inner">
                         @svg($service->icon, 'w-8 h-8')
                     </div>
                     <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $service->name }}</span>
@@ -179,13 +179,30 @@
 <script>
 function carousel() {
     return {
-        slides: [
-            { image: 'https://picsum.photos/id/296/800/400', title: 'Modern Slide 1', desc: 'Sleek card style with smooth transitions.' },
-            { image: 'https://picsum.photos/seed/picsum/800/400', title: 'Modern Slide 2', desc: 'Compact, elegant, and mobile-friendly.' },
-            { image: 'https://picsum.photos/id/324/800/400', title: 'Modern Slide 3', desc: 'Responsive and minimal carousel card.' },
+       dynamicSlides: @json($slides),
+
+        fallbackSlides: [
+            {
+                image: 'https://picsum.photos/id/296/800/400', 
+                title: 'No Providers Found',
+                desc: 'No featured providers available at the moment.'
+            },
+            {
+                image: 'https://picsum.photos/seed/picsum/800/400', 
+                title: 'Welcome!',
+                desc: 'Please check back later for featured content.'
+            }
         ],
+
         current: 0,
         interval: null,
+
+        // Computed property - main source of truth for slides
+        get slides() {
+            return this.dynamicSlides && this.dynamicSlides.length > 0
+                ? this.dynamicSlides
+                : this.fallbackSlides;
+        },
         init() {
             this.startAutoplay();
         },

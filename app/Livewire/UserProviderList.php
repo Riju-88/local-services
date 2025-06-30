@@ -14,7 +14,9 @@ class UserProviderList extends Component
     public function mount($user)
     {
         $this->user = User::find($user);
-        $this->providers = Provider::where('user_id', $user)->get();
+        $this->providers = Provider::where('user_id', $user)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
     }
 
     public function delete($id)

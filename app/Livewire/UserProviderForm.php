@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Mail\ProviderEmail;
+use Illuminate\Support\Facades\Mail;
 
 class UserProviderForm extends Component
 {
@@ -291,23 +293,40 @@ class UserProviderForm extends Component
     'contact_person_email' => $this->contact_person_email,
     'contact_person_whatsapp' => $this->contact_person_whatsapp,
 
-    // CHANGE THESE LINES:
-    'working_hours' => $workingHours, // Pass the PHP array directly
+    
+    'working_hours' => $workingHours, 
     'established_year' => $this->established_year,
-    'tags' => $tagsArray ?: null,     // Pass the PHP array (or null if $tagsArray is empty)
+    'tags' => $tagsArray ?: null, 
     ];
         
         $msg = '';
+
+        // Update Provider
         if ($this->providerId) {
         $provider = Provider::findOrFail($this->providerId);
         $provider->update($providerData);
         $msg = 'updated';
 
+        // Create Provider
         } else {
             $provider = Provider::create($providerData);
             $msg = 'created';
+
+        }
+        // Send email notification
+        if ($provider->email) {
+            try {
+                Mail::to($provider->email)->queue(new ProviderEmail($provider));
+            } 
+            catch (\Throwable $e) {
+                // Log or notify admin if needed
+                \Log::error('Failed to queue ProviderEmail: '.$e->getMessage());
+            }
+
+        
         }
 
+        // Show success toast
          $this->dispatch('showToast', 
         type: 'success', 
         message: 'Provider profile '.$msg.' successfully!',

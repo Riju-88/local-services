@@ -83,7 +83,7 @@ class ProviderResource extends Resource
                             ->panelLayout('grid')
                             ->reorderable()
                             ->imageEditor()
-                            ->disk('public')
+                            ->disk('uploads')
                             ->image(),
 
                         Forms\Components\FileUpload::make('logo')
@@ -91,7 +91,7 @@ class ProviderResource extends Resource
                             ->directory('provider-logos')
                             ->image()
                             ->imageEditor()
-                            ->disk('public'),
+                            ->disk('uploads'),
 
                         Forms\Components\Hidden::make('latitude'),
                         Forms\Components\Hidden::make('longitude'),

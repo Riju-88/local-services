@@ -48,11 +48,25 @@
             viewable
         />
 
+        <input type="file" wire:model="profile_photo" />
+
+        <!-- Register Button -->
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">
                 {{ __('Create account') }}
             </flux:button>
         </div>
+
+
+        {{--  Login with Google --}}
+             <div class="block mt-4">
+                <div class="flex w-full items-center justify-center mt-4">
+                    <a href="{{ url('auth/google') }}">
+                        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png">
+                    </a>
+                </div>
+            </div>
+            {{--  --}}
     </form>
 
     <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">

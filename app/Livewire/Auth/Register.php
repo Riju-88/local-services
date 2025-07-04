@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Layout('components.layouts.auth')]
 class Register extends Component
@@ -21,6 +22,7 @@ class Register extends Component
 
     public string $password_confirmation = '';
 
+    public $profile_photo;
     /**
      * Handle an incoming registration request.
      */
@@ -30,10 +32,14 @@ class Register extends Component
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'profile_photo' => ['nullable', 'image', 'max:2048'], // optional photo
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
         
+        if ($this->profile_photo) {
+    $validated['profile_photo_path'] = $this->profile_photo->store('profile-photos', 'uploads');
+        }
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);

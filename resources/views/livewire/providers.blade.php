@@ -87,7 +87,7 @@
                             <p class="text-xs text-gray-500"><strong>Loc:</strong> {{ Str::limit($provider->address, 40) }}</p>
                         @endif
 
-                        <a href="#"
+                        <a href="{{ route('provider-details', $provider->slug) }}"
                            class="mt-4 text-center text-sm bg-blue-600 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition">
                             View Details
                         </a>

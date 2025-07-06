@@ -31,34 +31,22 @@
             </flux:navbar>
 
             <flux:spacer />
+            <flux:navbar.item icon="layout-grid" :href="route('about')" :current="request()->routeIs('about')" wire:navigate>
+                    {{ __('About') }}
+                </flux:navbar.item>
 
+            <flux:spacer />
             <flux:navbar class="me-1.5 space-x-0.5 rtl:space-x-reverse py-0!">
                 <flux:tooltip :content="__('Search')" position="bottom">
                     {{-- <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" /> --}}
                     <div class="relative z-50"> <!-- wrap Livewire search in this -->
-    <livewire:search />
-</div>
+                    <livewire:search />
+                    </div>
 
                 </flux:tooltip>
-                <flux:tooltip :content="__('Repository')" position="bottom">
-                    <flux:navbar.item
-                        class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="folder-git-2"
-                        href="https://github.com/laravel/livewire-starter-kit"
-                        target="_blank"
-                        :label="__('Repository')"
-                    />
-                </flux:tooltip>
-                <flux:tooltip :content="__('Documentation')" position="bottom">
-                    <flux:navbar.item
-                        class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="book-open-text"
-                        href="https://laravel.com/docs/starter-kits#livewire"
-                        target="_blank"
-                        label="Documentation"
-                    />
-                </flux:tooltip>
-                <flux:tooltip :content="__('Documentation')" position="bottom">
+               
+               
+                <flux:tooltip :content="__('Theme')" position="bottom">
                     <!-- Add this button right here -->
   <!-- Persistent Theme Toggle using $flux.appearance -->
                 <flux:button 
@@ -153,29 +141,49 @@
         <flux:sidebar stashable sticky class="lg:hidden border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('dashboard') }}" class="ms-1 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            <a href="{{ route('home') }}" class="ms-1 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
                 <x-app-logo />
             </a>
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')">
-                    <flux:navlist.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                      {{ __('Dashboard') }}
+                    <flux:navlist.item icon="layout-grid" :href="route('home')" :current="request()->routeIs('home')" wire:navigate>
+                      {{ __('Home') }}
                     </flux:navlist.item>
+                    @auth
+                    <flux:navlist.item icon="layout-grid" :href="route('add-provider')" :current="request()->routeIs('add-provider')" wire:navigate>
+                      {{ __('Add Business') }}
+                    </flux:navlist.item>
+                    
+                    
+                    
+                    <flux:navlist.item icon="layout-grid" :href="route('user-providers', auth()->user()->id)" :current="request()->routeIs('manage-businesses')" wire:navigate>
+                      {{ __('Manage Business') }}
+                    </flux:navlist.item>
+                    
+                    <flux:navlist.item icon="layout-grid" :href="route('admin')" target="_blank" wire:navigate>
+                      {{ __('Admin') }}
+                    </flux:navlist.item>
+                    @endauth
+
+                    <flux:navlist.item icon="cog" :href="route('about')" :current="request()->routeIs('about')" wire:navigate>
+                      {{ __('About') }}
+                    </flux:navlist.item>
+                    @auth
+                    <flux:navlist.item icon="cog" :href="route('settings.profile')" :current="request()->routeIs('settings.profile')" wire:navigate>
+                      {{ __('Settings') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="arrow-right-start-on-rectangle" :href="route('logout')" :current="request()->routeIs('logout')" wire:navigate>
+                      {{ __('Log Out') }}
+                    </flux:navlist.item>
+                    @endauth
                 </flux:navlist.group>
             </flux:navlist>
 
-            <flux:spacer />
+          
 
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
+           
         </flux:sidebar>
 
         {{ $slot }}

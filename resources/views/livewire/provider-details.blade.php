@@ -20,15 +20,12 @@
               <h1 class="text-2xl md:text-3xl font-bold">{{ $provider->business_name }}</h1>
               
               <!-- Status Badges -->
+              @if ($provider->is_verified)
               <div class="badge badge-success gap-1" title="Verified Business">
-                <i class="fas fa-check-circle"></i> Verified
+                @svg('heroicon-c-check-badge', ['class' => 'w-8 h-8 text-blue-500'])
+                 
               </div>
-              <div class="badge badge-primary gap-1" title="Featured Business">
-                <i class="fas fa-star"></i> Featured
-              </div>
-              <div class="badge badge-success gap-1" title="Active Business">
-                <i class="fas fa-circle"></i> Active
-              </div>
+              @endif
             </div>
             
             <!-- Tags -->
@@ -82,16 +79,10 @@
         <section id="overview" class="card bg-base-100 shadow-xl mb-8">
           <div class="card-body">
             <h2 class="card-title text-xl mb-4">
-              <i class="fas fa-info-circle mr-2"></i> Business Overview
+              <i class="fas fa-info-circle mr-2"></i> Overview
             </h2>
-            <p class="text-base-content/80 mb-6">
-              Acme Corporation is a leading provider of innovative solutions for businesses of all sizes. 
-              With over 35 years of experience, we specialize in developing cutting-edge software, 
-              providing expert consulting services, and delivering exceptional customer support. 
-              Our team of dedicated professionals is committed to helping our clients achieve their goals 
-              through technology-driven solutions that enhance productivity, streamline operations, 
-              and drive growth. At Acme, we believe in building lasting relationships with our clients 
-              based on trust, integrity, and mutual success.
+            <p class="text-base-content/80 mb-6 mx-2">
+              {{ $provider->description }}
             </p>
             
             <!-- Working Hours -->
@@ -99,19 +90,23 @@
               <h3 class="font-semibold text-lg mb-2">
                 <i class="fas fa-clock mr-2"></i> Working Hours
               </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <div class="flex justify-between">
-                  <span>Monday - Friday:</span>
-                  <span>9:00 AM - 6:00 PM</span>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mx-2">
+                <div class="flex justify-between mb-4">
+                 
+                  {{-- check if open today using carbon --}}
+                 @if( in_array(\Carbon\Carbon::now()->format('l'), $provider->working_hours['days']) )
+    <p class="text-green-500 font-bold">Open Today</p>
+@else
+    <p class="text-red-500 font-bold">Closed Today</p>
+@endif
+                  <span class="font-semibold">
+    {{ \Carbon\Carbon::createFromFormat('H:i', $provider->working_hours['from'])->format('g:i A') }}
+    -
+    {{ \Carbon\Carbon::createFromFormat('H:i', $provider->working_hours['to'])->format('g:i A') }}
+</span>
+               
                 </div>
-                <div class="flex justify-between">
-                  <span>Saturday:</span>
-                  <span>10:00 AM - 4:00 PM</span>
-                </div>
-                <div class="flex justify-between">
-                  <span>Sunday:</span>
-                  <span>Closed</span>
-                </div>
+              
               </div>
             </div>
           </div>
@@ -167,7 +162,7 @@
       <div class="lg:col-span-1">
         <!-- Contact Information -->
         <section id="contact" class="card bg-base-100 shadow-xl mb-8">
-          <div class="card-body">
+          <div class="card-body mx-2">
             <h2 class="card-title text-xl mb-4">
               <i class="fas fa-address-card mr-2"></i> Contact Information
             </h2>
@@ -179,41 +174,43 @@
                 <li class="flex items-start">
                   <i class="fas fa-phone-alt mt-1 mr-2 w-5 text-center"></i>
                   <div>
-                    <p>+1 (234) 567-8900</p>
+                    <p>{{ $provider->phone }}</p>
                     <p class="text-sm text-base-content/70">Primary</p>
                   </div>
                 </li>
-                <li class="flex items-start">
+                {{-- <li class="flex items-start">
                   <i class="fas fa-phone-alt mt-1 mr-2 w-5 text-center"></i>
                   <div>
                     <p>+1 (234) 567-8901</p>
                     <p class="text-sm text-base-content/70">Alternative</p>
                   </div>
-                </li>
+                </li> --}}
                 <li class="flex items-start">
                   <i class="fab fa-whatsapp mt-1 mr-2 w-5 text-center text-green-500"></i>
                   <div>
-                    <p>+1 (234) 567-8902</p>
+                    <p>{{ $provider->whatsapp }}</p>
                     <p class="text-sm text-base-content/70">WhatsApp</p>
                   </div>
                 </li>
                 <li class="flex items-start">
                   <i class="fas fa-envelope mt-1 mr-2 w-5 text-center"></i>
                   <div>
-                    <p>info@acmecorp.com</p>
+                    <p>{{ $provider->email }}</p>
                   </div>
                 </li>
                 <li class="flex items-start">
                   <i class="fas fa-globe mt-1 mr-2 w-5 text-center"></i>
                   <div>
-                    <a href="https://acmecorp.com" class="link link-hover">acmecorp.com</a>
+                  @if ($provider->website)
+                    <a href="{{ $provider->website }}" target="_blank" class="link link-hover">{{ $provider->website }}</a>
+                  @endif
                   </div>
                 </li>
               </ul>
             </div>
             
             <!-- Contact Person -->
-            <div class="mb-6">
+            <div class="mb-6 mx-2">
               <h3 class="font-semibold mb-2">Contact Person</h3>
               <div class="flex items-center gap-3 mb-3">
                 <div class="avatar">
@@ -222,27 +219,28 @@
                   </div>
                 </div>
                 <div>
-                  <p class="font-medium">John Smith</p>
-                  <p class="text-sm text-base-content/70">Marketing Director</p>
+                  <p class="font-medium">{{ $provider->contact_person_name }}</p>
+                  <p class="text-sm text-base-content/70">{{ $provider->contact_person_role }}</p>
                 </div>
               </div>
               <ul class="space-y-2">
                 <li class="flex items-start">
-                  <i class="fas fa-phone-alt mt-1 mr-2 w-5 text-center"></i>
+                 @svg('heroicon-m-device-phone-mobile', 'w-5 text-center')
                   <div>
-                    <p>+1 (234) 567-8910</p>
+                    <p>{{ $provider->contact_person_phone }}</p>
                   </div>
                 </li>
                 <li class="flex items-start">
-                  <i class="fab fa-whatsapp mt-1 mr-2 w-5 text-center text-green-500"></i>
+                  @svg('heroicon-s-phone', 'w-5 text-center text-green-500 mr-2')
+                  
                   <div>
-                    <p>+1 (234) 567-8911</p>
+                    <p>{{ $provider->contact_person_whatsapp }}</p>
                   </div>
                 </li>
                 <li class="flex items-start">
                   <i class="fas fa-envelope mt-1 mr-2 w-5 text-center"></i>
                   <div>
-                    <p>john.smith@acmecorp.com</p>
+                    <p>{{ $provider->contact_person_email }}</p>
                   </div>
                 </li>
               </ul>
@@ -253,7 +251,7 @@
         <!-- Location Information -->
         <section id="location" class="card bg-base-100 shadow-xl mb-8">
           <div class="card-body">
-            <h2 class="card-title text-xl mb-4">
+            <h2 class="card-title text-xl mb-4 mx-2">
               <i class="fas fa-map-marker-alt mr-2"></i> Location
             </h2>
             
@@ -262,17 +260,17 @@
                 <img src="https://picsum.photos/id/1015/600/300" alt="Map" class="w-full h-48 object-cover" />
               </div>
               
-              <address class="not-italic">
+              <address class="not-italic mx-3">
                 {{ $provider->address }}
               </address>
               
-              <div class="mt-2">
+              <div class="mt-2 mx-3">
                 <span class="badge">{{ $provider->area }}</span>
                 <span class="badge">{{ $provider->pincode }}</span>
               </div>
               
               <a href="https://maps.google.com" target="_blank" class="btn btn-outline btn-sm mt-4 w-full">
-                <i class="fas fa-directions mr-1"></i> Get Directions
+                <i class="fas fa-directions mx-2"></i> Get Directions
               </a>
             </div>
           </div>

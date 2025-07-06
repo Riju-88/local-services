@@ -9,6 +9,7 @@ use App\Livewire\Providers;
 use App\Livewire\ProviderDetails;
 use App\Livewire\UserDetails;
 use App\Livewire\Test;
+use App\Livewire\About;
 use App\Livewire\UserProviderForm;
 use App\Livewire\UserProviderList;
 use App\Http\Controllers\GoogleLoginController;
@@ -37,6 +38,9 @@ Route::get('/business/new/{provider?}', UserProviderForm::class)->name('add-prov
 
 // user provider list
 Route::get('/business/manage/{user}', UserProviderList::class)->name('user-providers');
+
+// About
+Route::get('/about', About::class)->name('about');
 
 // edit provider
 Route::get('/business/edit/{provider}', UserProviderForm::class)->name('edit-provider');

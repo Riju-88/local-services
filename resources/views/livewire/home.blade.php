@@ -1,4 +1,6 @@
 <div>
+<h1 class="text-5xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent m-2 text-center">Discover All Businesses in Belgaria</h1>
+<p class="text-2xl font-light text-gray-600 dark:text-gray-300 text-center mb-8">Find hoteles, restaurants, shops, schools and more</p>
 {{-- carousel  --}}
 <div 
     x-data="carousel()" 
@@ -112,10 +114,10 @@
                         <!-- Separator -->
                         @if ($hasProviders)
                             <hr class="border-t border-gray-200 dark:border-gray-700 my-4">
-                        @endif
+                     
 
                         <!-- Direct Service Providers -->
-                       @if ($hasProviders)
+                      
      {{-- Providers Grid --}}
     @if ($service->providers->isNotEmpty())
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -157,7 +159,7 @@
                             <p class="text-xs text-gray-500"><strong>Loc:</strong> {{ Str::limit($provider->address, 40) }}</p>
                         @endif
 
-                        <a href="#"
+                        <a href="{{ route('provider-details', $provider->slug) }}"
                            class="mt-4 text-center text-sm bg-blue-600 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition">
                             View Details
                         </a>

@@ -1,17 +1,5 @@
 <div>
-@auth
-    @if ($showVerificationSuccess)
-        <div class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50">
-            Your email has been successfully verified!
-            <button 
-                wire:click="dismissVerificationMessage" 
-                class="ml-2 hover:text-gray-200"
-            >
-                ×
-            </button>
-        </div>
-    @endif
-@endauth
+
 <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent m-2 text-center">Discover All Businesses in Belgaria</h1>
 <p class="text-2xl font-light text-gray-600 dark:text-gray-300 text-center mb-8">Find hoteles, restaurants, shops, schools and more</p>
 {{-- carousel  --}}

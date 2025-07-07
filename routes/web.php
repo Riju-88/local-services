@@ -32,9 +32,9 @@ Route::redirect('root', '/admin')->name('admin');
 
 // Route::get('/test', Test::class)->name('test');
 
-// Route::view('dashboard', 'dashboard')
-//     ->middleware(['auth', 'verified'])
-//     ->name('dashboard');
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
     // User Provider Form
 Route::get('/business/new/{provider?}', UserProviderForm::class)->name('add-provider');

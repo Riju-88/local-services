@@ -7,7 +7,7 @@
         <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
-            <a href="{{ route('dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
+            <a href="{{ route('home') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
                 <x-app-logo />
             </a>
 
@@ -20,23 +20,23 @@
                     {{ __('Add Business') }}
                 </flux:navbar.item>
                 @endauth
-                <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+
+                {{-- <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
-                </flux:navbar.item>
-                @auth
+                </flux:navbar.item> --}}
+
+                @can('accessFilamentAdmin')
                 <flux:navbar.item icon="layout-grid" :href="route('admin')" :current="request()->routeIs('admin')" target="_blank">
                     {{ __('Admin') }}
                 </flux:navbar.item>
-                @endauth
-            </flux:navbar>
+                @endcan
 
-            <flux:spacer />
             <flux:navbar.item icon="layout-grid" :href="route('about')" :current="request()->routeIs('about')" wire:navigate>
                     {{ __('About') }}
                 </flux:navbar.item>
+            {{-- </flux:navbar>
 
-            <flux:spacer />
-            <flux:navbar class="me-1.5 space-x-0.5 rtl:space-x-reverse py-0!">
+            <flux:navbar class="me-1.5 space-x-0.5 rtl:space-x-reverse py-0!"> --}}
                 <flux:tooltip :content="__('Search')" position="bottom">
                     {{-- <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" /> --}}
                     <div class="relative z-50"> <!-- wrap Livewire search in this -->
@@ -160,11 +160,13 @@
                     <flux:navlist.item icon="layout-grid" :href="route('user-providers', auth()->user()->id)" :current="request()->routeIs('manage-businesses')" wire:navigate>
                       {{ __('Manage Business') }}
                     </flux:navlist.item>
-                    
+                    @endauth
+
+                    @can('accessFilamentAdmin')
                     <flux:navlist.item icon="layout-grid" :href="route('admin')" target="_blank" wire:navigate>
                       {{ __('Admin') }}
                     </flux:navlist.item>
-                    @endauth
+                    @endcan
 
                     <flux:navlist.item icon="cog" :href="route('about')" :current="request()->routeIs('about')" wire:navigate>
                       {{ __('About') }}

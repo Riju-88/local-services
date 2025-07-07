@@ -7,12 +7,12 @@
         @if ($service)
             <nav class="text-sm text-gray-500 mt-1">
                 <ol class="list-reset flex space-x-2">
-                    <li><a href="{{ route('home') }}" class="hover:underline text-gray-600">Home</a></li>
+                    <li><a href="{{ route('home') }}" class="hover:underline text-gray-600" wire:navigate>Home</a></li>
                     @if ($serviceCategory)
                         <li>/</li>
                         <li>
                             <a href="{{ route('providers', ['service_slug' => $service->slug]) }}"
-                               class="hover:underline text-gray-600">
+                               class="hover:underline text-gray-600" wire:navigate>
                                 {{ $service->name }}
                             </a>
                         </li>
@@ -43,7 +43,7 @@
             <strong class="font-bold">No Providers Available</strong>
             <span class="block mt-1">There are currently no active providers for this selection.</span>
             <a href="{{ route('home') }}"
-               class="inline-block mt-2 text-blue-600 hover:underline text-sm">← Go back to all services</a>
+               class="inline-block mt-2 text-blue-600 hover:underline text-sm" wire:navigate>← Go back to all services</a>
         </div>
     @endif
 
@@ -65,13 +65,13 @@
 
                     {{-- Content --}}
                     <div class="p-5 flex flex-col flex-grow">
-                        <a href="{{ route('provider-details', $provider->slug) }}" class="text-gray-800 hover:underline">
+                        <a href="{{ route('provider-details', $provider->slug) }}" class="text-gray-800 hover:underline" wire:navigate>
                         <h2 class="text-lg font-semibold text-gray-800 mb-1">{{ $provider->business_name }}</h2>
                         </a>
 
                         @if ($provider->user)
                             <p class="text-sm text-gray-500 mb-1">
-                                By <a href="{{ route('user-details', $provider->user) }}" class="font-medium text-blue-600 hover:underline cursor-pointer">{{ $provider->user->name }}</a>
+                                By <a href="{{ route('user-details', $provider->user) }}" class="font-medium text-blue-600 hover:underline cursor-pointer" wire:navigate>{{ $provider->user->name }}</a>
                             </p>
                         @endif
 
@@ -88,7 +88,7 @@
                         @endif
 
                         <a href="{{ route('provider-details', $provider->slug) }}"
-                           class="mt-4 text-center text-sm bg-blue-600 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition">
+                           class="mt-4 text-center text-sm bg-blue-600 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition" wire:navigate>
                             View Details
                         </a>
                     </div>

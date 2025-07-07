@@ -53,16 +53,16 @@
             
             <!-- Quick Contact Buttons -->
             <div class="flex flex-wrap gap-2 mt-4">
-              <a href="tel:+1234567890" class="btn btn-sm btn-outline">
+              <a href="tel:{{ $provider->phone }}" class="btn btn-sm btn-outline">
                 <i class="fas fa-phone mr-1"></i> Call
               </a>
-              <a href="https://wa.me/1234567890" class="btn btn-sm btn-outline btn-success">
+              <a href="https://wa.me/{{ $provider->whatsapp ?? $provider->phone }}" class="btn btn-sm btn-outline btn-success">
                 <i class="fab fa-whatsapp mr-1"></i> WhatsApp
               </a>
-              <a href="mailto:info@acmecorp.com" class="btn btn-sm btn-outline">
+              <a href="mailto:{{ $provider->email }}" class="btn btn-sm btn-outline">
                 <i class="fas fa-envelope mr-1"></i> Email
               </a>
-              <a href="https://acmecorp.com" target="_blank" class="btn btn-sm btn-outline">
+              <a href="{{ $provider->website ?? '#' }}" target="_blank" class="btn btn-sm btn-outline">
                 <i class="fas fa-globe mr-1"></i> Website
               </a>
             </div>
@@ -202,7 +202,7 @@
                   <i class="fas fa-globe mt-1 mr-2 w-5 text-center"></i>
                   <div>
                   @if ($provider->website)
-                    <a href="{{ $provider->website }}" target="_blank" class="link link-hover">{{ $provider->website }}</a>
+                    <a href="{{ $provider->website }}" target="_blank" class="link link-hover" wire:navigate>{{ $provider->website }}</a>
                   @endif
                   </div>
                 </li>

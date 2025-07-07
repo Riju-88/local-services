@@ -33,7 +33,7 @@
               </div>
               @endif
               <div>
-                <h2 class="text-xl font-semibold"><a  href="{{ route('provider-details', $provider) }}" class="hover:underline pointer"> {{ $provider->business_name }}
+                <h2 class="text-xl font-semibold"><a  href="{{ route('provider-details', $provider) }}" class="hover:underline pointer" wire:navigate> {{ $provider->business_name }}
                 </a></h2>
                 <p class="text-sm opacity-70"> {{ $provider->address }}</p>
               </div>
@@ -43,7 +43,7 @@
                     
                 </flux:button>
                 <flux:menu>
-                    <flux:menu.item icon="pencil" href="{{ route('edit-provider', $provider) }}">Edit</flux:menu.item>
+                    <flux:menu.item icon="pencil" href="{{ route('edit-provider', $provider) }}" wire:navigate>Edit</flux:menu.item>
                     <flux:menu.separator />
                      <flux:modal.trigger name="confirm-delete-{{ $provider->id }}">
           <flux:menu.item variant="danger" icon="trash">Delete</flux:menu.item>

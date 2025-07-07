@@ -27,11 +27,14 @@ Route::get('/services/{service_slug}/{category_slug?}', Providers::class)->name(
 Route::get('/provider/{provider}', ProviderDetails::class)->name('provider-details');
 
 Route::get('/users/{user}', UserDetails::class)->name('user-details');
-Route::get('/test', Test::class)->name('test');
+
 Route::redirect('root', '/admin')->name('admin');
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+
+// Route::get('/test', Test::class)->name('test');
+
+// Route::view('dashboard', 'dashboard')
+//     ->middleware(['auth', 'verified'])
+//     ->name('dashboard');
 
     // User Provider Form
 Route::get('/business/new/{provider?}', UserProviderForm::class)->name('add-provider');

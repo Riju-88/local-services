@@ -13,7 +13,7 @@
             {{-- Providers --}}
             @foreach ($results['providers'] as $provider)
                 <a href="{{ route('provider-details', ['provider' => $provider]) }}"
-                   class="block px-4 py-2 text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700">
+                   class="block px-4 py-2 text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700" wire:navigate>
                     🏢 {{ $provider->business_name }}
                 </a>
             @endforeach

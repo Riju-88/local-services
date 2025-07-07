@@ -74,7 +74,7 @@
                 </flux:modal.trigger>
             @else
                 <a href="{{ route('providers', ['service_slug' => $service->slug]) }}"
-                   class="w-full h-full cursor-pointer transform transition-all duration-300 hover:shadow-lg rounded-md bg-white dark:bg-transparent shadow-sm p-4 flex flex-col items-center justify-center space-y-2">
+                   class="w-full h-full cursor-pointer transform transition-all duration-300 hover:shadow-lg rounded-md bg-white dark:bg-transparent shadow-sm p-4 flex flex-col items-center justify-center space-y-2" wire:navigate>
                     <div class="w-16 h-16 flex items-center justify-center rounded-full bg-slate-400 text-white shadow-inner">
                         @svg($service->icon, 'w-8 h-8')
                     </div>
@@ -100,7 +100,7 @@
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                     @foreach ($service->serviceCategory as $category)
                                         <a href="{{ route('providers', ['service_slug' => $service->slug, 'category_slug' => $category->slug]) }}"
-                                           class="group flex flex-col items-center justify-center p-4 rounded-xl bg-white dark:bg-transparent shadow hover:shadow-lg  transition-all duration-300">
+                                           class="group flex flex-col items-center justify-center p-4 rounded-xl bg-white dark:bg-transparent shadow hover:shadow-lg  transition-all duration-300" wire:navigate>
                                             <div class="w-12 h-12 flex items-center justify-center rounded-full bg-indigo-100 group-hover:bg-indigo-200 text-indigo-700 transition-colors">
                                                 @svg($category->icon, 'w-6 h-6')
                                             </div>
@@ -137,13 +137,13 @@
 
                     {{-- Content --}}
                     <div class="p-5 flex flex-col flex-grow">
-                        <a href="{{ route('provider-details', $provider->slug) }}" class="text-gray-800 hover:underline">
+                        <a href="{{ route('provider-details', $provider->slug) }}" class="text-gray-800 hover:underline" wire:navigate>
                         <h2 class="text-lg font-semibold text-gray-800 mb-1">{{ $provider->business_name }}</h2>
                         </a>
 
                         @if ($provider->user)
                             <p class="text-sm text-gray-500 mb-1">
-                                By <a href="{{ route('user-details', $provider->user) }}" class="font-medium text-blue-600 hover:underline cursor-pointer">{{ $provider->user->name }}</a>
+                                By <a href="{{ route('user-details', $provider->user) }}" class="font-medium text-blue-600 hover:underline cursor-pointer" wire:navigate>{{ $provider->user->name }}</a>
                             </p>
                         @endif
 
@@ -160,7 +160,7 @@
                         @endif
 
                         <a href="{{ route('provider-details', $provider->slug) }}"
-                           class="mt-4 text-center text-sm bg-blue-600 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition">
+                           class="mt-4 text-center text-sm bg-blue-600 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition" wire:navigate>
                             View Details
                         </a>
                     </div>

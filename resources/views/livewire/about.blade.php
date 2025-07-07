@@ -23,7 +23,7 @@
     <div class="bg-blue-600 dark:bg-blue-700 text-white p-8 rounded-lg shadow-lg mb-12">
       <h2 class="text-2xl font-bold mb-4">Join the Community</h2>
       <p class="mb-6">Help make Belgharia more connected by sharing your service or discovering someone else's.</p>
-      <a href="{{ route('home') }}" class="inline-block bg-white text-blue-700 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition">
+      <a href="{{ route('home') }}" class="inline-block bg-white text-blue-700 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition" wire:navigate>
         Explore Services
       </a>
     </div>
@@ -41,7 +41,7 @@
         <li>Email: <a href="mailto:rijumistri4@gmail.com" class="text-blue-600 dark:text-blue-400 underline">rijumistri4@gmail.com</a></li>
         <li>Location: Belgharia, Kolkata</li>
         <li>Socials: 
-          <a href="https://www.facebook.com/rij88" class="text-blue-600 dark:text-blue-400 underline mr-2">Facebook</a> | 
+          <a href="https://www.facebook.com/rij88" class="text-blue-600 dark:text-blue-400 underline mr-2" target="_blank">Facebook</a> | 
           <a href="#" class="text-blue-600 dark:text-blue-400 underline mr-2">Instagram</a> | 
           <a href="#" class="text-blue-600 dark:text-blue-400 underline">Twitter</a>
         </li>

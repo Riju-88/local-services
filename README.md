@@ -1,12 +1,12 @@
-# 🏠 Belgharia Services
+# 🏠 Local Services
 
-> A local service directory connecting residents with trusted providers in Belgharia.
+> A local service directory connecting residents with trusted providers in their area.
 
 ![App Screenshot](./screenshots/home.png)
 
-## 🚀 About Belgharia Services
+## 🚀 About Local Services
 
-LocalServe Belgharia is a web application designed to help residents of Belgharia find and connect with local service providers — from plumbers and electricians to tutors and small businesses.
+This is a web application designed to help local area residents find and connect with local service providers — from plumbers and electricians to tutors and small businesses.
 
 This platform empowers users to browse services, contact providers directly, and even list their own business for free — all in one place.
 
@@ -24,28 +24,29 @@ This platform empowers users to browse services, contact providers directly, and
 -   **Framework:** Laravel 12
 -   **Frontend:** Tailwind CSS + Alpine.js
 -   **Database:** MySQL
--   **Hosting:** [InfinityFree](https://www.infinityfree.net/)
 
 ## 💻 Built With
 
-This is a solo project built primarily for portfolio use. If users find it helpful, there are plans to host it publicly and potentially monetize featured business listings.
+This project built primarily for portfolio use. If users find it helpful, there are plans to host it publicly and potentially monetize featured business listings.
 
 ## 🌐 Live Demo
 
 You can access the live version of this app at:  
-🔗 https://localservebelgharia.infinityfreeapp.com
+🔗 [belgharia-services.free.nf](https://belgharia-services.free.nf/)
 
 ## 📸 Screenshots
 
-| Home Page                            | Service Listing                                       |
-| ------------------------------------ | ----------------------------------------------------- |
-| ![Home Page](./screenshots/home.png) | ![Service Listing](./screenshots/manage_business.png) |
+| Home Page                            | User Added Services                                       |
+| ------------------------------------ | --------------------------------------------------------- |
+| ![Home Page](./screenshots/home.png) | ![User added Services](./screenshots/manage_business.png) |
 
-| User Profile                                    | Admin Dashboard                                    |
-| ----------------------------------------------- | -------------------------------------------------- |
-| ![User Profile](./screenshots/screenshot-3.png) | ![Admin Dashboard](./screenshots/screenshot-4.png) |
+| Service List                                                               | Admin Dashboard                                                                |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| ![Service List](./screenshots/Provider%20list-%20Belgharia%20Services.png) | ![Admin Dashboard](./screenshots/Admin%20Panel%20-%20Belgharia%20Services.png) |
 
-_(You can replace these placeholders with actual screenshots once ready.)_
+| Search                              | About                             |
+| ----------------------------------- | --------------------------------- |
+| ![Search](./screenshots/search.png) | ![About](./screenshots/about.png) |
 
 ## 📄 License
 
